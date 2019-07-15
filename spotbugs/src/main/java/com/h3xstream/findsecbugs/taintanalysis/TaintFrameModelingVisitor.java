@@ -566,7 +566,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
 
 //            transferTaintfield(obj,taintCopy);
             processCollection(obj,taintCopy);
-//            generateConstantValue(obj,taintCopy);
+            generateConstantValue(obj,taintCopy);
 //            generateRealType(obj,taintCopy);
             modelInstruction(obj,numConsume , numProduce, taintCopy);
 
