@@ -1563,6 +1563,24 @@ factory pattern to create these objects.</p>
     <Details>Seesion defined by checkmarx</Details>
   </Detector>
 
+  <Detector class="com.h3xstream.findsecbugs.injection.convert.ResourceInjectionDetector">
+    <Details>Identify various kinds of Resource Injection in ServerSocket APIs that can affect data.</Details>
+  </Detector>
+
+  <Detector class="com.h3xstream.findsecbugs.injection.convert.RaceConditionDetector">
+    <Details>The result is that one user could see another user's data.</Details>
+  </Detector>
+
+  <Detector class="com.h3xstream.findsecbugs.injection.convert.PrivacyViolationDetector">
+    <Details>
+      <![CDATA[
+      The software maybe not properly prevent private data (such as credit card numbers) from being accessed by actors who either
+      (1) are not explicitly authorized to access the data or
+      (2) do not have the implicit consent of the people to which the data is related.
+       ]]>
+    </Details>
+  </Detector>
+
   <Detector class="edu.umd.cs.findbugs.detect.TrainNonNullAnnotations">
     <Details>
       <![CDATA[
@@ -8788,6 +8806,65 @@ after the call to initLogging, the logger configuration is lost
         </p>]]>
       </Details>
   </BugPattern>
+
+  <BugPattern type="RESOURCE_INJECTION">
+    <ShortDescription>ServerSocket is created by untrusted input.</ShortDescription>
+    <LongDescription>The resource type affected by user input {1} indicates the content type that may be exposed.</LongDescription>
+    <Details>
+      <![CDATA[<p>
+      This attack consists of changing resource identifiers used by an application in order to perform a malicious task.
+      When an application defines a resource type or location based on user input,
+      such as a file name or port number, this data can be manipulated to execute or access different resources.
+      The resource type affected by user input indicates the content type that may be exposed.
+      For example, an application that permits input of special characters like period, slash,
+      and backslash is risky when used in conjunction with methods that interact with the filesystem.
+      </p>]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="RACE_CONDITION">
+    <ShortDescription>Race Condition maybe happen.</ShortDescription>
+    <LongDescription>The class {1} is a singleton,maybe lead to race condition.</LongDescription>
+    <Details>
+      <![CDATA[<P>
+      Many Servlet developers do not understand that a Servlet is a singleton.
+     There is only one instance of the Servlet,
+      and that single instance is used and re-used to handle multiple requests that are processed simultaneously by different threads.
+A common result of this misunderstanding is that developers use Servlet member fields in such a way
+  that one user may inadvertently see another user's data. In other words,
+  storing user data in Servlet member fields introduces a data access race condition.
+  </p>]]>
+    </Details>
+  </BugPattern>
+
+  <BugPattern type="PRIVACY_VIOLATION">
+    <ShortDescription>Exposure of Private Information.</ShortDescription>
+    <LongDescription>Method {3} maybe lead to privacy violation.</LongDescription>
+    <Details>
+      <![CDATA[<P>
+      Mishandling private information, such as customer passwords or Social Security numbers, can compromise user privacy and is often illegal.
+      An exposure of private information does not necessarily prevent the software from working properly, and in fact it might be intended by the developer, but it can still be undesirable (or explicitly prohibited by law) for the people who are associated with this private information.
+    Privacy violations may occur when:
+      Private user information enters the program.
+      The data is written to an external location, such as the console, file system, or network.
+      Private data can enter a program in a variety of ways:
+    Directly from the user in the form of a password or personal information
+    Accessed from a database or other data store by the application.
+    Indirectly from a partner or other third party
+Some types of private information include:
+    Government identifiers, such as Social Security Numbers
+    Contact information, such as home addresses and telephone numbers Geographic location - where the user is (or was)
+    Employment history
+    Financial data - such as credit card numbers, salary, bank accounts, and debts
+    Pictures, video, or audio
+    Behavioral patterns - such as web surfing history, when certain activities are performed, etc.
+    Relationships (and types of relationships) with others - family, friends, contacts, etc.
+    Communications - e-mail addresses, private e-mail messages, SMS text messages, chat logs, etc.
+    Health - medical conditions, insurance status, prescription records
+    Credentials, such as passwords, which can be used to access other information.
+  </p>]]>
+    </Details>
+  </BugPattern>
   <!--
   **********************************************************************
    BugCodes
@@ -8943,4 +9020,7 @@ after the call to initLogging, the logger configuration is lost
   <BugCode abbrev="Seesion">Seesion</BugCode>
   <BugCode abbrev="Unrestricted_FileUpload">Unrestricted_FileUpload</BugCode>
   <BugCode abbrev="JSON_HijackingDetector">JSON_HijackingDetector</BugCode>
+  <BugCode abbrev="RESOURCE">Resource Injection(Serversocket)</BugCode>
+  <BugCode abbrev="RACE">Race Condition</BugCode>
+  <BugCode abbrev="PRIVACY">PRIVACY VIOLATION</BugCode>
 </MessageCollection>

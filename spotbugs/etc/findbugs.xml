@@ -292,6 +292,12 @@
           <Detector class="com.h3xstream.findsecbugs.injection.convert.JSON_HijackingDetector" reports="JSON_HIJACKING" speed="fast"/>
           <Detector class="com.h3xstream.findsecbugs.injection.convert.Session_FIxationDetector2" reports="Seesion" speed="fast"/>
           <Detector class="com.h3xstream.findsecbugs.injection.convert.Unrestricted_FileUpload" reports="Unrestricted_FileUpload" speed="fast"/>
+          <Detector class="com.h3xstream.findsecbugs.injection.convert.ResourceInjectionDetector" speed="fast"
+              reports="RESOURCE_INJECTION"/>
+         <Detector class="com.h3xstream.findsecbugs.injection.convert.RaceConditionDetector" speed="fast"
+              reports="RACE_CONDITION"/>
+         <Detector class="com.h3xstream.findsecbugs.injection.convert.PrivacyViolationDetector" speed="fast"
+              reports="PRIVACY_VIOLATION"/>
           <Detector class="com.h3xstream.findsecbugs.injection.command.CommandInjectionDetector" reports="COMMAND_INJECTION,SCALA_COMMAND_INJECTION"/>
           <Detector class="edu.umd.cs.findbugs.detect.FindRoughConstants"
                     reports="CNT_ROUGH_CONSTANT_VALUE" speed="fast" hidden="false"/>
@@ -1262,6 +1268,10 @@
           <BugPattern type="Seesion" abbrev="Seesion" category="SECURITY"/>
           <BugPattern type="Unrestricted_FileUpload" abbrev="Unrestricted_FileUpload" category="SECURITY"/>
           <BugPattern type="JSON_HIJACKING" abbrev="JSON_HIJACKING" category="SECURITY"/>
+          <BugPattern abbrev="RESOURCE" type="RESOURCE_INJECTION" category="SECURITY" />
+          <BugPattern abbrev="RACE" type="RACE_CONDITION" category="SECURITY" />
+          <BugPattern abbrev="PRIVACY" type="PRIVACY_VIOLATION" category="SECURITY"/>
+
 </FindbugsPlugin>
 
 
