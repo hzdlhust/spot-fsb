@@ -659,8 +659,25 @@
                     reports="DM_DEFAULT_ENCODING"/>
           <Detector class="edu.umd.cs.findbugs.detect.CheckRelaxingNullnessAnnotation" speed="fast"
                     reports="NP_METHOD_RETURN_RELAXING_ANNOTATION,NP_METHOD_PARAMETER_TIGHTENS_ANNOTATION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.aws.AwsQueryInjectionDetector" reports="AWS_QUERY_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.beans.BeanInjectionDetector" reports="BEAN_PROPERTY_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.fileDisclosure.FileDisclosureDetector" reports="STRUTS_FILE_DISCLOSURE,SPRING_FILE_DISCLOSURE,REQUESTDISPATCHER_FILE_DISCLOSURE"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.formatter.FormatStringManipulationDetector" reports="FORMAT_STRING_MANIPULATION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.http.HttpParameterPollutionDetector" reports="HTTP_PARAMETER_POLLUTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.smtp.SmtpHeaderInjectionDetector" reports="SMTP_HEADER_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.crlf.CrlfLogInjectionDetector" reports="CRLF_INJECTION_LOGS"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.custom.CustomInjectionDetector" reports="CUSTOM_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.ldap.LdapInjectionDetector" reports="LDAP_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.redirect.UnvalidatedRedirectDetector" reports="UNVALIDATED_REDIRECT" />
+    <Detector class="com.h3xstream.findsecbugs.injection.script.OgnlInjectionDetector"
+              reports="OGNL_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.script.ScriptInjectionDetector"
+              reports="SCRIPT_ENGINE_INJECTION,SPEL_INJECTION,EL_INJECTION,SEAM_LOG_INJECTION,OGNL_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.script.SpelViewDetector" reports="SPEL_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.trust.TrustBoundaryViolationAttributeDetector" reports="TRUST_BOUNDARY_VIOLATION"/>
+    <Detector class="com.h3xstream.findsecbugs.injection.trust.TrustBoundaryViolationValueDetector" reports="TRUST_BOUNDARY_VIOLATION"/>
 
-            <!-- Bug Categories -->
+    <!-- Bug Categories -->
            <BugCategory category="NOISE" hidden="true"/>
 
           <!-- Bug Codes -->
@@ -1271,6 +1288,24 @@
           <BugPattern abbrev="RESOURCE" type="RESOURCE_INJECTION" category="SECURITY" />
           <BugPattern abbrev="RACE" type="RACE_CONDITION" category="SECURITY" />
           <BugPattern abbrev="PRIVACY" type="PRIVACY_VIOLATION" category="SECURITY"/>
+    <BugPattern type="AWS_QUERY_INJECTION" abbrev="SECAQI" category="SECURITY"/>
+    <BugPattern type="BEAN_PROPERTY_INJECTION" abbrev="SECBPI" category="SECURITY"/>
+    <BugPattern type="SPRING_FILE_DISCLOSURE" abbrev="SECSF" category="SECURITY"/>
+    <BugPattern type="STRUTS_FILE_DISCLOSURE" abbrev="SECSFD" category="SECURITY"/>
+    <BugPattern type="REQUESTDISPATCHER_FILE_DISCLOSURE" abbrev="SECSFDR" category="SECURITY"/>
+    <BugPattern type="FORMAT_STRING_MANIPULATION" abbrev="SECFSM" category="SECURITY"/>
+    <BugPattern type="HTTP_PARAMETER_POLLUTION" abbrev="SECHPP" category="SECURITY"/>
+    <BugPattern type="SMTP_HEADER_INJECTION" abbrev="SECSMTP" category="SECURITY"/>
+    <BugPattern type="CRLF_INJECTION_LOGS" abbrev="SECCRLFLOG" category="SECURITY" cweid="117"/>
+    <BugPattern type="CUSTOM_INJECTION" abbrev="SECCUSTOMI" category="SECURITY" cweid="74"/>
+    <BugPattern type="LDAP_INJECTION" abbrev="SECLDAPI" category="SECURITY" cweid="90"/>
+    <BugPattern type="UNVALIDATED_REDIRECT" abbrev="SECUR" category="SECURITY" cweid="601"/>
+    <BugPattern type="OGNL_INJECTION" abbrev="SECOGNL" category="SECURITY" cweid="94"/>
+    <BugPattern type="SCRIPT_ENGINE_INJECTION" abbrev="SCRIPTE" category="SECURITY" cweid="94"/>
+    <BugPattern type="SPEL_INJECTION" abbrev="SPELI" category="SECURITY" cweid="94"/>
+    <BugPattern type="EL_INJECTION" abbrev="SECEL" category="SECURITY" cweid="94"/>
+    <BugPattern type="SEAM_LOG_INJECTION" abbrev="SECSEAM" category="SECURITY" cweid="94"/>
+    <BugPattern type="TRUST_BOUNDARY_VIOLATION" abbrev="SECTBV" category="SECURITY" cweid="501"/>
 
 </FindbugsPlugin>
 
