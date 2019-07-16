@@ -676,7 +676,47 @@
     <Detector class="com.h3xstream.findsecbugs.injection.script.SpelViewDetector" reports="SPEL_INJECTION"/>
     <Detector class="com.h3xstream.findsecbugs.injection.trust.TrustBoundaryViolationAttributeDetector" reports="TRUST_BOUNDARY_VIOLATION"/>
     <Detector class="com.h3xstream.findsecbugs.injection.trust.TrustBoundaryViolationValueDetector" reports="TRUST_BOUNDARY_VIOLATION"/>
+    <Detector class="com.h3xstream.findsecbugs.cookie.CookieReadDetector" reports="COOKIE_USAGE"/>
+    <Detector class="com.h3xstream.findsecbugs.cookie.CookieFlagsDetector" reports="INSECURE_COOKIE,HTTPONLY_COOKIE"/>
+    <Detector class="com.h3xstream.findsecbugs.cookie.PersistentCookieDetector" reports="COOKIE_PERSISTENT" />
+    <Detector class="com.h3xstream.findsecbugs.cookie.UrlRewritingDetector" reports="URL_REWRITING"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.cipher.DesUsageDetector" reports="DES_USAGE"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.cipher.TDesUsageDetector" reports="TDES_USAGE"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.cipher.RsaNoPaddingDetector" reports="RSA_NO_PADDING"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.BadHexadecimalConversionDetector" reports="BAD_HEXA_CONVERSION"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.CipherWithNoIntegrityDetector" reports="ECB_MODE,PADDING_ORACLE,CIPHER_INTEGRITY"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.CustomMessageDigestDetector" reports="CUSTOM_MESSAGE_DIGEST"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.ErrorMessageExposureDetector" reports="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE"/>
 
+    <Detector class="com.h3xstream.findsecbugs.crypto.HazelcastSymmetricEncryptionDetector"
+              reports="HAZELCAST_SYMMETRIC_ENCRYPTION"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.InsecureSmtpSslDetector" reports="INSECURE_SMTP_SSL"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.InsufficientKeySizeBlowfishDetector" reports="BLOWFISH_KEY_SIZE"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.InsufficientKeySizeRsaDetector" reports="RSA_KEY_SIZE"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.NullCipherDetector" reports="NULL_CIPHER"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.StaticIvDetector" reports="STATIC_IV"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.UnencryptedServerSocketDetector" reports="UNENCRYPTED_SERVER_SOCKET"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.UnencryptedSocketDetector" reports="UNENCRYPTED_SOCKET"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.WeakMessageDigestDetector" reports="WEAK_MESSAGE_DIGEST_MD5,WEAK_MESSAGE_DIGEST_SHA1"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.WeakTLSDetector" reports="DEFAULT_HTTP_CLIENT,SSL_CONTEXT"/>
+    <Detector class="com.h3xstream.findsecbugs.crypto.WeakTrustManagerDetector" reports="WEAK_TRUST_MANAGER,WEAK_HOSTNAME_VERIFIER"/>
+    <Detector class="com.h3xstream.findsecbugs.file.FileUploadFilenameDetector" reports="FILE_UPLOAD_FILENAME"/>
+    <Detector class="com.h3xstream.findsecbugs.file.PathTraversalDetector" reports="PATH_TRAVERSAL_IN,PATH_TRAVERSAL_OUT,SCALA_PATH_TRAVERSAL_IN"/>
+    <Detector class="com.h3xstream.findsecbugs.jsp.JspIncludeDetector" reports="JSP_INCLUDE" />
+    <Detector class="com.h3xstream.findsecbugs.jsp.JspSpringEvalDetector" reports="JSP_SPRING_EVAL" />
+    <Detector class="com.h3xstream.findsecbugs.jsp.JstlOutDetector" reports="JSP_JSTL_OUT" />
+    <Detector class="com.h3xstream.findsecbugs.jsp.XslTransformJspDetector" reports="JSP_XSLT" />
+    <Detector class="com.h3xstream.findsecbugs.ldap.AnonymousLdapDetector" reports="LDAP_ANONYMOUS"/>
+    <Detector class="com.h3xstream.findsecbugs.ldap.LdapEntryPoisoningDetector" reports="LDAP_ENTRY_POISONING"/>
+    <Detector class="com.h3xstream.findsecbugs.password.ConstantPasswordDetector" reports="HARD_CODE_PASSWORD,HARD_CODE_KEY"/>
+    <Detector class="com.h3xstream.findsecbugs.password.GoogleApiKeyDetector" reports="HARD_CODE_PASSWORD"/>
+    <Detector class="com.h3xstream.findsecbugs.password.HardcodedPasswordEqualsDetector" reports="HARD_CODE_PASSWORD"/>
+    <Detector class="com.h3xstream.findsecbugs.password.HardcodePasswordInMapDetector" reports="HARD_CODE_PASSWORD"/>
+    <Detector class="com.h3xstream.findsecbugs.password.HashUnsafeEqualsDetector" reports="UNSAFE_HASH_EQUALS"/>
+    <Detector class="com.h3xstream.findsecbugs.password.IntuitiveHardcodePasswordDetector" reports="HARD_CODE_PASSWORD"/>
+    <Detector class="com.h3xstream.findsecbugs.xpath.XPathInjectionDetector" reports="XPATH_INJECTION"/>
+    <Detector class="com.h3xstream.findsecbugs.taintanalysis.extra.PotentialValueTracker" reports="HARD_CODE_PASSWORD,DES_USAGE,WEAK_MESSAGE_DIGEST_MD5,WEAK_MESSAGE_DIGEST_SHA1"/> <!-- This detector is not reporting any issue -->
+    <Detector class="com.h3xstream.findsecbugs.taintanalysis.extra.JstlExpressionWhiteLister" reports="XSS_JSP_PRINT"/> <!-- This detector is not reporting any issue -->
     <!-- Bug Categories -->
            <BugCategory category="NOISE" hidden="true"/>
 
@@ -1306,6 +1346,49 @@
     <BugPattern type="EL_INJECTION" abbrev="SECEL" category="SECURITY" cweid="94"/>
     <BugPattern type="SEAM_LOG_INJECTION" abbrev="SECSEAM" category="SECURITY" cweid="94"/>
     <BugPattern type="TRUST_BOUNDARY_VIOLATION" abbrev="SECTBV" category="SECURITY" cweid="501"/>
+    <BugPattern type="INSECURE_COOKIE" abbrev="SECIC" category="SECURITY" cweid="614"/>
+    <BugPattern type="HTTPONLY_COOKIE" abbrev="SECHOC" category="SECURITY"/>
+    <BugPattern type="COOKIE_USAGE" abbrev="SECCU" category="SECURITY"/>
+    <BugPattern type="COOKIE_PERSISTENT" abbrev="SECCP" category="SECURITY"/>
+    <BugPattern type="URL_REWRITING" abbrev="SECURLR" category="SECURITY"/>
+    <BugPattern type="DES_USAGE" abbrev="SECDU" category="SECURITY" cweid="327"/>
+    <BugPattern type="TDES_USAGE" abbrev="SECTDU" category="SECURITY" cweid="326"/>
+    <BugPattern type="RSA_NO_PADDING" abbrev="SECRNP" category="SECURITY" cweid="780"/>
+    <BugPattern type="BAD_HEXA_CONVERSION" abbrev="SECBHC" category="SECURITY" cweid="704"/>
+    <BugPattern type="ECB_MODE" abbrev="SECECB" category="SECURITY" cweid="327"/>
+    <BugPattern type="PADDING_ORACLE" abbrev="PADORA" category="SECURITY" cweid="326"/>
+    <BugPattern type="CIPHER_INTEGRITY" abbrev="CIPINT" category="SECURITY" cweid="353"/>
+    <BugPattern type="CUSTOM_MESSAGE_DIGEST" abbrev="SECCMD" category="SECURITY" cweid="327"/>
+    <BugPattern type="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE" abbrev="ERRMSG" category="SECURITY" cweid="209"/>
+    <BugPattern type="ESAPI_ENCRYPTOR" abbrev="ESAPIENC" category="SECURITY"/>
+    <BugPattern type="HAZELCAST_SYMMETRIC_ENCRYPTION" abbrev="SECHAZ" category="SECURITY" cweid="327"/>
+    <BugPattern type="INSECURE_SMTP_SSL" abbrev="SECISC" category="SECURITY"/>
+    <BugPattern type="BLOWFISH_KEY_SIZE" abbrev="SECBKS" category="SECURITY" cweid="326"/>
+    <BugPattern type="RSA_KEY_SIZE" abbrev="SECRKS" category="SECURITY" cweid="326"/>
+    <BugPattern type="NULL_CIPHER" abbrev="SECNC" category="SECURITY" cweid="327"/>
+    <BugPattern type="STATIC_IV" abbrev="STAIV" category="SECURITY" cweid="329"/>
+    <BugPattern type="UNENCRYPTED_SERVER_SOCKET" abbrev="SECUSS" category="SECURITY" cweid="319"/>
+    <BugPattern type="UNENCRYPTED_SOCKET" abbrev="SECUS" category="SECURITY" cweid="319"/>
+    <BugPattern type="WEAK_MESSAGE_DIGEST_MD5" abbrev="SECMD5" category="SECURITY" cweid="328"/>
+    <BugPattern type="WEAK_MESSAGE_DIGEST_SHA1" abbrev="SECSHA1" category="SECURITY" cweid="328"/>
+    <BugPattern type="DEFAULT_HTTP_CLIENT" abbrev="SECHTTPCLIENT" category="SECURITY"/>
+    <BugPattern type="SSL_CONTEXT" abbrev="SECSSL" category="SECURITY"/>
+    <BugPattern type="WEAK_TRUST_MANAGER" abbrev="SECWTM" category="SECURITY" cweid="295"/>
+    <BugPattern type="WEAK_HOSTNAME_VERIFIER" abbrev="SECWHV" category="SECURITY" cweid="295"/>
+    <BugPattern type="FILE_UPLOAD_FILENAME" abbrev="SECFUN" category="SECURITY"/>
+    <BugPattern type="PATH_TRAVERSAL_IN" abbrev="SECPTI" category="SECURITY" cweid="22"/>
+    <BugPattern type="PATH_TRAVERSAL_OUT" abbrev="SECPTO" category="SECURITY" cweid="22"/>
+    <BugPattern type="SCALA_PATH_TRAVERSAL_IN" abbrev="SSECPTI" category="SECURITY" cweid="22"/>
+    <BugPattern type="JSP_INCLUDE" abbrev="SECJSPINC" category="SECURITY" cweid="98"/>
+    <BugPattern type="JSP_SPRING_EVAL" abbrev="SECJSPSPRING" category="SECURITY" cweid="917"/>
+    <BugPattern type="JSP_JSTL_OUT" abbrev="SECJSPJSTL" category="SECURITY" cweid="79"/>
+    <BugPattern type="JSP_XSLT" abbrev="SECJSPXSLT" category="SECURITY" cweid="94"/>
+    <BugPattern type="LDAP_ANONYMOUS" abbrev="LDAPA" category="SECURITY"/>
+    <BugPattern type="LDAP_ENTRY_POISONING" abbrev="SECLDAPEP" category="SECURITY" cweid="90"/>
+    <BugPattern type="HARD_CODE_PASSWORD" abbrev="SECHCP" category="SECURITY" cweid="259"/>
+    <BugPattern type="HARD_CODE_KEY" abbrev="SECHCK" category="SECURITY" cweid="321"/>
+    <BugPattern type="UNSAFE_HASH_EQUALS" abbrev="SECUHE" category="SECURITY" cweid="203"/>
+    <BugPattern type="XPATH_INJECTION" abbrev="SECXPI" category="SECURITY" cweid="643"/>
 
 </FindbugsPlugin>
 
