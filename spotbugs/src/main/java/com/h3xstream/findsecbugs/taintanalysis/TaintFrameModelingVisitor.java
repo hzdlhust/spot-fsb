@@ -468,7 +468,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
             idxValue = Integer.parseInt(inputstr);
             Taint.State ls = getFrame().getTopValue().innerArray.get(idxValue);
             if(ls != null) getFrame().getTopValue().setState(ls);
-            else getFrame().getTopValue().setState(Taint.State.SAFE);
+            else return;
             // just transfer the taint from array to value at any index
         } catch (DataflowAnalysisException ex) {
             throw new InvalidBytecodeException("Not enough values on the stack", ex);
