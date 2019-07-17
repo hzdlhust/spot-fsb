@@ -428,20 +428,19 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
     @Override
     public void visitAASTORE(AASTORE obj) {
         try {
-            Taint.State valueState = getFrame().popValue().getState();
+            Taint valueTaint = getFrame().popValue();
+            Taint.State valueState = valueTaint.getState();
             Taint idxTaint = getFrame().popValue();
             String idxStr = idxTaint.getConstantValue();
             Taint arrayTaint = getFrame().popValue();
-            Taint merge = null;
             if(idxStr == null || idxStr.equals("")){
 
             }else{
                 int idxVal = Integer.parseInt(idxStr);
                 arrayTaint.innerArray.put(idxVal,valueState);
             }
-            merge = Taint.merge(idxTaint, arrayTaint);
+            Taint merge = Taint.merge(valueTaint, arrayTaint);
             setLocalVariableTaint(merge, arrayTaint);
-
             Taint stackTop = null;
             if (getFrame().getStackDepth() > 0) {
                 stackTop = getFrame().getTopValue();
