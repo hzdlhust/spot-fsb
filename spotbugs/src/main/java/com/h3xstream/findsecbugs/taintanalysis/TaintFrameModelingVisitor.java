@@ -462,8 +462,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
             Taint idx = getFrame().popValue(); // array index
             String inputstr = idx.getConstantValue();
             int idxValue = -1;
-            if(inputstr==null || inputstr!=""){
-                getFrame().popValue();
+            if(inputstr==null || inputstr==""){
                 return;
             }
             idxValue = Integer.parseInt(inputstr);
