@@ -430,10 +430,18 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
         try {
             Taint.State valueState = getFrame().popValue().getState();
             Taint idxTaint = getFrame().popValue();
-            int idxVal = Integer.parseInt(idxTaint.getConstantValue());
+            String idxStr = idxTaint.getConstantValue();
             Taint arrayTaint = getFrame().popValue();
-            arrayTaint.innerArray.put(idxVal,valueState);
-            setLocalVariableTaint(arrayTaint, arrayTaint);
+            Taint merge = null;
+            if(idxStr == null || idxStr.equals("")){
+
+            }else{
+                int idxVal = Integer.parseInt(idxStr);
+                arrayTaint.innerArray.put(idxVal,valueState);
+            }
+            merge = Taint.merge(idxTaint, arrayTaint);
+            setLocalVariableTaint(merge, arrayTaint);
+
             Taint stackTop = null;
             if (getFrame().getStackDepth() > 0) {
                 stackTop = getFrame().getTopValue();
@@ -462,7 +470,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
             Taint idx = getFrame().popValue(); // array index
             String inputstr = idx.getConstantValue();
             int idxValue = -1;
-            if(inputstr==null || inputstr==""){
+            if(inputstr==null || inputstr.equals("")){
                 return;
             }
             idxValue = Integer.parseInt(inputstr);
