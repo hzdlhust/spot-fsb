@@ -769,7 +769,7 @@ public class Taint {
             }
             sb.append(" source={").append(b.toString()).append('}');
         }
-        if (constantValue != null && constantValue != "*") {
+        if (constantValue != null && constantValue != "") {
             sb.append(" constant=").append(constantValue);
         }
         if (potentialValue != null) {

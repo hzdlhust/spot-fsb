@@ -460,7 +460,13 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
     public void visitAALOAD(AALOAD obj) {
         try {
             Taint idx = getFrame().popValue(); // array index
-            int idxValue = Integer.parseInt(idx.getConstantValue());
+            String inputstr = idx.getConstantValue();
+            int idxValue = -1;
+            if(inputstr==null || inputstr!=""){
+                getFrame().popValue();
+                return;
+            }
+            idxValue = Integer.parseInt(inputstr);
             Taint.State ls = getFrame().getTopValue().innerArray.get(idxValue);
             if(ls != null) getFrame().getTopValue().setState(ls);
             else getFrame().getTopValue().setState(Taint.State.SAFE);
