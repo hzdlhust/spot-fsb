@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -182,6 +183,7 @@ public class TaintConfig extends HashMap<String, TaintMethodConfig> {
         if (taintMethodConfig == null) {
             taintMethodConfig = get(className.concat(methodId));
         }
+
 
         if (taintMethodConfig == null) {
             taintMethodConfig = getSuperMethodConfig(className, methodId);

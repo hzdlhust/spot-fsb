@@ -87,18 +87,18 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
         this.methodGen = methodGen;
     }
 
-    @Override
-    public void setParament() {
-        super.setParament();
-        Type[] tp = methodGen.getArgumentTypes();
-        int argueNum = tp.length;
-        if(argueNum>0 &&getFrame().getSlotList().size()>0 &&getFrame().getValue(0).getRealInstanceClass()==null){
-            for(int i = 0 ; i < argueNum ; i++){
-                String s = tp[i].toString();
-                getFrame().getValue(i).setRealInstanceClass(new ObjectType(s));
-            }
-        }
-    }
+//    @Override
+//    public void setParament() {
+//        super.setParament();
+//        Type[] tp = methodGen.getArgumentTypes();
+//        int argueNum = tp.length;
+//        if(argueNum>0 &&getFrame().getSlotList().size()>0 &&getFrame().getValue(0).getRealInstanceClass()==null){
+//            for(int i = 0 ; i < argueNum ; i++){
+//                String s = tp[i].toString();
+//                getFrame().getValue(i).setRealInstanceClass(new ObjectType(s));
+//            }
+//        }
+//    }
 
     private Collection<Integer> getMutableStackIndices(String signature) {
         assert signature != null && !signature.isEmpty();
@@ -878,6 +878,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
         String signature = obj.getSignature(cpg);
         String returnType = getReturnType(signature);
         String className = getInstanceClassName(obj);
+//        String className2 =
         String methodName = obj.getMethodName(cpg);
         String methodId = "." + methodName + signature;
         TaintMethodConfig config = taintConfig.getMethodConfig(getFrame(), methodDescriptor, className, methodId);
