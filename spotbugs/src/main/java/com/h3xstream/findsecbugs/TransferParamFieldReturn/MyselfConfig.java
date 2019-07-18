@@ -13,6 +13,7 @@ import org.apache.bcel.generic.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class MyselfConfig {
@@ -40,18 +41,20 @@ public class MyselfConfig {
     }
 
     public void visitClass(ClassContext classContext) throws CheckedAnalysisException {
+        List<Method> me = classContext.getMethodsInCallOrder();
         for (Method method : classContext.getMethodsInCallOrder()) {
             StringBuffer key = new StringBuffer(classContext.toString().replace('.','/'));
             key.append('.');
             key.append(method.getName());
             key.append(method.getSignature());
             String typeSignature = key.toString();
-            if(taintConfig.containsKey(key.toString())) return;
+            if(taintConfig.containsKey(key.toString())) continue;
             TaintDataflow dataflow = getTaintDataFlow(classContext, method);
             ConstantPoolGen cpg = classContext.getConstantPoolGen();
             ArrayList<Integer> param = new ArrayList<Integer>();
             boolean influcebyself = false;
             boolean mutable = false;
+            boolean returnSafe = false;
             boolean tag = true;
             int dep = 0;
             int N = 0;
@@ -76,7 +79,7 @@ public class MyselfConfig {
 
 
                 if( instruction instanceof PUTFIELD||instruction instanceof  PUTSTATIC){
-                    if(fact.getStackDepth() == 0) return;
+                    if(fact.getStackDepth() == 0) continue;
                     FieldInstruction inv = (FieldInstruction)instruction;
                     Taint t = fact.getTopValue();
                     Set<UnknownSource> s = t.getSources();
@@ -86,8 +89,9 @@ public class MyselfConfig {
                         }
                     }
                 } else if(instruction instanceof ReturnInstruction){
-                    if(fact.getStackDepth() == 0) return;
+                    if(fact.getStackDepth() == 0) continue;
                     Taint t = fact.getTopValue();
+                    if(t.getState() == Taint.State.SAFE) returnSafe = true;
                     Set<UnknownSource> s = t.getSources();
                     for(UnknownSource us:s){
                         if(us.getSourceType() == UnknownSourceType.FIELD) influcebyself = true;
@@ -99,21 +103,21 @@ public class MyselfConfig {
             }
 
             String config ="";
-            if(param.size() == 0 && influcebyself == false) config = "SAFE";
+            if(returnSafe||(param.size() == 0 && influcebyself == false)) config = "SAFE";
             else {
                 for(int index:param){
-                    config += index+',';
+                    config  = config+""+index+",";
                 }
                 if(influcebyself) config += N;
-                else    config = config.substring(0,config.length());
+                else    config = config.substring(0,config.length()-1);
             }
             if(mutable) config += "#"+(N);
 
 
             try{
-                if(!TaintMethodConfig.accepts(typeSignature,config)) return;
+                if(!TaintMethodConfig.accepts(typeSignature,config)) continue;
 
-                TaintMethodConfig taintMethodConfig = new TaintMethodConfig(true).load(config);
+                TaintMethodConfig taintMethodConfig = new TaintMethodConfig(false).load(config);
                 taintMethodConfig.setTypeSignature(typeSignature);
                 taintConfig.put(typeSignature, taintMethodConfig);
             }catch (Exception e){

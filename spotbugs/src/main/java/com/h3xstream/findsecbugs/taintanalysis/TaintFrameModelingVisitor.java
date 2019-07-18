@@ -87,18 +87,18 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
         this.methodGen = methodGen;
     }
 
-    @Override
-    public void setParament() {
-        super.setParament();
-        Type[] tp = methodGen.getArgumentTypes();
-        int argueNum = tp.length;
-        if(argueNum>0 &&getFrame().getSlotList().size()>0 &&getFrame().getValue(0).getRealInstanceClass()==null){
-            for(int i = 0 ; i < argueNum ; i++){
-                String s = tp[i].toString();
-                getFrame().getValue(i).setRealInstanceClass(new ObjectType(s));
-            }
-        }
-    }
+//    @Override
+//    public void setParament() {
+//        super.setParament();
+//        Type[] tp = methodGen.getArgumentTypes();
+//        int argueNum = tp.length;
+//        if(argueNum>0 &&getFrame().getSlotList().size()>0 &&getFrame().getValue(0).getRealInstanceClass()==null){
+//            for(int i = 0 ; i < argueNum ; i++){
+//                String s = tp[i].toString();
+//                getFrame().getValue(i).setRealInstanceClass(new ObjectType(s));
+//            }
+//        }
+//    }
 
     private Collection<Integer> getMutableStackIndices(String signature) {
         assert signature != null && !signature.isEmpty();
@@ -428,12 +428,19 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
     @Override
     public void visitAASTORE(AASTORE obj) {
         try {
-            Taint.State valueState = getFrame().popValue().getState();
+            Taint valueTaint = getFrame().popValue();
+            Taint.State valueState = valueTaint.getState();
             Taint idxTaint = getFrame().popValue();
-            int idxVal = Integer.parseInt(idxTaint.getConstantValue());
+            String idxStr = idxTaint.getConstantValue();
             Taint arrayTaint = getFrame().popValue();
-            arrayTaint.innerArray.put(idxVal,valueState);
-            setLocalVariableTaint(arrayTaint, arrayTaint);
+            if(idxStr == null || idxStr.equals("")){
+
+            }else{
+                int idxVal = Integer.parseInt(idxStr);
+                arrayTaint.innerArray.put(idxVal,valueState);
+            }
+            Taint merge = Taint.merge(valueTaint, arrayTaint);
+            setLocalVariableTaint(merge, arrayTaint);
             Taint stackTop = null;
             if (getFrame().getStackDepth() > 0) {
                 stackTop = getFrame().getTopValue();
@@ -462,7 +469,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
             Taint idx = getFrame().popValue(); // array index
             String inputstr = idx.getConstantValue();
             int idxValue = -1;
-            if(inputstr==null || inputstr==""){
+            if(inputstr==null || inputstr.equals("")){
                 return;
             }
             idxValue = Integer.parseInt(inputstr);
@@ -871,6 +878,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
         String signature = obj.getSignature(cpg);
         String returnType = getReturnType(signature);
         String className = getInstanceClassName(obj);
+//        String className2 =
         String methodName = obj.getMethodName(cpg);
         String methodId = "." + methodName + signature;
         TaintMethodConfig config = taintConfig.getMethodConfig(getFrame(), methodDescriptor, className, methodId);

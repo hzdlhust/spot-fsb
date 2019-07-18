@@ -1038,9 +1038,11 @@ public class FindBugs2 implements IFindBugsEngine, AutoCloseable {
                 Global.getAnalysisCache().purgeClassAnalysis(FBClassReader.class);
 
                 try{
-                for(ClassDescriptor cd:classCollection){
-                    MyselfConfig.getMyselfConfig().visit(cd);
-                }
+                    if(tag == 2){
+                        for(ClassDescriptor cd:classCollection){
+                            MyselfConfig.getMyselfConfig().visit(cd);
+                        }
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                 }

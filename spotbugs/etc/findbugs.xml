@@ -432,9 +432,9 @@
           <Detector class="edu.umd.cs.findbugs.detect.NumberConstructor" speed="fast"
                     disabled="false" reports="DM_NUMBER_CTOR,DM_FP_NUMBER_CTOR"/>
           <Detector class="com.h3xstream.findsecbugs.xss.XSSRequestWrapperDetector" reports="XSS_REQUEST_WRAPPER"/>
-          <Detector class="edu.umd.cs.findbugs.detect.FindSqlInjection" speed="moderate"
-                    reports="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE,SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING"
-                    disabled="false"/>
+          <!--<Detector class="edu.umd.cs.findbugs.detect.FindSqlInjection" speed="moderate"-->
+                    <!--reports="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE,SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING"-->
+                    <!--disabled="false"/>-->
           <Detector class="edu.umd.cs.findbugs.detect.FindDoubleCheck" speed="fast"
                     reports="DC_DOUBLECHECK,DC_PARTIALLY_CONSTRUCTED"/>
           <Detector class="edu.umd.cs.findbugs.detect.FindFinalizeInvocations" speed="fast"
@@ -643,8 +643,8 @@
           <Detector class="edu.umd.cs.findbugs.detect.CheckTypeQualifiers" speed="slow"
                     reports="TQ_ALWAYS_VALUE_USED_WHERE_NEVER_REQUIRED,TQ_NEVER_VALUE_USED_WHERE_ALWAYS_REQUIRED,TQ_MAYBE_SOURCE_VALUE_REACHES_ALWAYS_SINK,TQ_MAYBE_SOURCE_VALUE_REACHES_NEVER_SINK,TQ_EXPLICIT_UNKNOWN_SOURCE_VALUE_REACHES_NEVER_SINK,TQ_EXPLICIT_UNKNOWN_SOURCE_VALUE_REACHES_ALWAYS_SINK,TQ_COMPARING_VALUES_WITH_INCOMPATIBLE_TYPE_QUALIFIERS,TQ_UNKNOWN_VALUE_USED_WHERE_ALWAYS_STRICTLY_REQUIRED"/>
 
-          <Detector class="edu.umd.cs.findbugs.detect.CrossSiteScripting"
-                    reports="HRS_REQUEST_PARAMETER_TO_HTTP_HEADER,HRS_REQUEST_PARAMETER_TO_COOKIE,XSS_REQUEST_PARAMETER_TO_JSP_WRITER,XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER,XSS_REQUEST_PARAMETER_TO_SEND_ERROR,PT_ABSOLUTE_PATH_TRAVERSAL,PT_RELATIVE_PATH_TRAVERSAL"/>
+          <!--<Detector class="edu.umd.cs.findbugs.detect.CrossSiteScripting"-->
+                    <!--reports="HRS_REQUEST_PARAMETER_TO_HTTP_HEADER,HRS_REQUEST_PARAMETER_TO_COOKIE,XSS_REQUEST_PARAMETER_TO_JSP_WRITER,XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER,XSS_REQUEST_PARAMETER_TO_SEND_ERROR,PT_ABSOLUTE_PATH_TRAVERSAL,PT_RELATIVE_PATH_TRAVERSAL"/>-->
           <Detector class="edu.umd.cs.findbugs.detect.DontIgnoreResultOfPutIfAbsent"
                     reports="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED"/>
           <Detector
