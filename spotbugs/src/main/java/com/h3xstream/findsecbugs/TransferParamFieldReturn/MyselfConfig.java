@@ -131,7 +131,7 @@ public class MyselfConfig {
                 else
                 {
                     if(config.length()>0)
-                    config = config.substring(0,config.length()-1);
+                        config = config.substring(0,config.length()-1);
                 }
             }
             if(mutable) config += "#"+(N);
