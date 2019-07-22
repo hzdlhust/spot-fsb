@@ -66,6 +66,7 @@ public abstract class AbstractTaintDetector implements Detector {
         if(!shouldAnalyzeClass(classContext)) {
             return;
         }
+        List<Method> n = classContext.getMethodsInCallOrder();
         for (Method method : classContext.getMethodsInCallOrder()) {
             if (classContext.getMethodGen(method) == null) {
                 continue;
