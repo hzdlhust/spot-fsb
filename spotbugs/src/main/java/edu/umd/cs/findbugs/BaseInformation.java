@@ -129,4 +129,55 @@ public class BaseInformation {
              }
          }
      }
+     /*存储漏洞信息*/
+     public void saveDetailText(BugInstance bugInstance,int id){
+         String s=Integer.toString(id);
+         String fileName="";
+         if(s.length()<5) {
+             for(int i=0;i<5-s.length();i++){
+                 fileName+="0";
+             }
+             fileName+=s;
+         }
+         else if(s.length()>5){
+             System.out.print("too many bugs");
+         }
+         else fileName=s;
+
+         String filePath=System.getProperty("user.dir");
+         String dir=filePath+"\\repoters";
+         File oFile=new File(dir);
+         if(!oFile.exists()){
+             oFile.mkdir();
+         }
+         dir=dir+"\\detailedInformation";
+         File file=new File(dir);
+         if(!file.exists()){
+            file.mkdir();
+         }
+         dir=dir+"\\"+fileName+".txt";
+         File f=new File(dir);
+         if(!f.exists()){
+             try {
+                 f.createNewFile();
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+         }
+         BugPattern bugPattern=bugInstance.getBugPattern();
+         BugCode bugCode=bugPattern.getBugCode();
+         String detailPlainText="Bug description:"+bugCode.getDescription()+"\n\n"+bugPattern.getDetailPlainText()+"\n\n"+"Bug kind and pattern:"
+                 +bugPattern.getCategory()+"-"+bugPattern.getType();
+         BufferedOutputStream out= null;
+         try {
+             out = new BufferedOutputStream(new FileOutputStream(dir));
+             out.write(detailPlainText.getBytes());
+             out.flush();
+             out.close();
+         } catch (FileNotFoundException e) {
+             e.printStackTrace();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+}
 }

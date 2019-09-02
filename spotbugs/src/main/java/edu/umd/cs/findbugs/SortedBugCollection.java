@@ -550,11 +550,13 @@ public class SortedBugCollection implements BugCollection {
                     BaseInformation baseInformation=new BaseInformation();
                     baseInformation.PriorityInfo(bugInstance);
                     baseInformation.BugInfo(bugInstance);
+                    baseInformation.saveDetailText(bugInstance,id);
                     //保存图片
                     CreateFlow createFlow=new CreateFlow();
                     createFlow.setWindows(bugInstance,id);
 //                    CreateWorkFlow createWorkFlow=new CreateWorkFlow();
 //                    createWorkFlow.generateWorkFlow(bugInstance,id);
+
                 }
             }
 

@@ -24,7 +24,7 @@ public class CreateFlow extends JPanel{
         bi = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
         tg = bi.getGraphics();
         paint(tg);
-       saveFile();
+        saveFile();
     }
     public void paint(Graphics g) {
         super.paint(g);
