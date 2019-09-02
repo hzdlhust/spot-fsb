@@ -440,6 +440,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
                 arrayTaint.innerArray.put(idxVal,valueState);
             }
             Taint merge = Taint.merge(valueTaint, arrayTaint);
+            arrayTaint.setState(merge.getState());
             setLocalVariableTaint(merge, arrayTaint);
             Taint stackTop = null;
             if (getFrame().getStackDepth() > 0) {

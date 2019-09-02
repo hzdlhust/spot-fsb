@@ -11,6 +11,8 @@ java/util/Collection.toArray()[Ljava/lang/Object;:0
 java/util/Collection.toArray([Ljava/lang/Object;)[Ljava/lang/Object;:1
 org/owasp/benchmark/helpers/ThingInterface.doSomething(Ljava/lang/String;)Ljava/lang/String;:0
 
+
+
 java/util/Iterator.next()Ljava/lang/Object;:0
 
 

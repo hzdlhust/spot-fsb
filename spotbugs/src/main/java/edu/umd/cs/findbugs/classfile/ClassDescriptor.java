@@ -70,6 +70,7 @@ public class ClassDescriptor implements Comparable<ClassDescriptor>, Serializabl
         return className;
     }
 
+
     /*
      * (non-Javadoc)
      *
