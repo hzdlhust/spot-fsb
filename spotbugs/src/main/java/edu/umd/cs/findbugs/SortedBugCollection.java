@@ -56,6 +56,7 @@ import javax.annotation.WillClose;
 import javax.annotation.WillNotClose;
 import javax.xml.transform.TransformerException;
 
+import com.h3xstream.findsecbugs.CreateWorkFlow;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
@@ -143,6 +144,7 @@ public class SortedBugCollection implements BugCollection {
      */
     private long timestamp;
 
+    public static int id;
 
     public long getTimeStartedLoading() {
         return timeStartedLoading;
@@ -539,9 +541,20 @@ public class SortedBugCollection implements BugCollection {
             }
 
             // Write BugInstances
+            id=0;
             for (BugInstance bugInstance : getCollection()) {
                 if (!applySuppressions || !project.getSuppressionFilter().match(bugInstance)) {
-                    bugInstance.writeXML(xmlOutput, this, withMessages);
+                    id++;
+                    bugInstance.writeXML(xmlOutput, this, withMessages,id);
+                    //基本消息
+                    BaseInformation baseInformation=new BaseInformation();
+                    baseInformation.PriorityInfo(bugInstance);
+                    baseInformation.BugInfo(bugInstance);
+                    //保存图片
+                    CreateFlow createFlow=new CreateFlow();
+                    createFlow.setWindows(bugInstance,id);
+//                    CreateWorkFlow createWorkFlow=new CreateWorkFlow();
+//                    createWorkFlow.generateWorkFlow(bugInstance,id);
                 }
             }
 

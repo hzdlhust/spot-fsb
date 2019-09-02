@@ -21,6 +21,8 @@ package edu.umd.cs.findbugs;
 
 import edu.umd.cs.findbugs.ba.ClassContext;
 
+import java.io.IOException;
+
 /**
  * The interface which all bug pattern detectors must implement.
  */
@@ -40,6 +42,6 @@ public interface Detector extends Priorities {
      * by any detectors which accumulate information over all visited classes to
      * generate results.
      */
-    public void report();
+    public void report() throws IOException;
 }
 

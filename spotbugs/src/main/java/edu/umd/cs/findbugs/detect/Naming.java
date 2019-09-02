@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.detect;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -412,7 +413,11 @@ public class Naming extends PreorderVisitor implements Detector {
         }
         hasBadMethodNames = badMethodNames > 3 && badMethodNames > obj.getMethods().length / 3;
         isEclipseNLS = "org.eclipse.osgi.util.NLS".equals(obj.getSuperclassName());
-        super.visit(obj);
+        try {
+            super.visit(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

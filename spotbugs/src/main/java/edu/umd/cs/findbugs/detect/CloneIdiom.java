@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.detect;
 
+import java.io.IOException;
 import java.util.Set;
 
 import org.apache.bcel.Const;
@@ -137,7 +138,11 @@ public class CloneIdiom extends DismantleBytecode implements Detector, Stateless
         hasCloneMethod = false;
         referencesCloneMethod = false;
         check = true;
-        super.visit(obj);
+        try {
+            super.visit(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

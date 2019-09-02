@@ -1949,7 +1949,7 @@ public class BugInstance implements Comparable<BugInstance>, XMLWriteable, Clone
 
     @Override
     public void writeXML(XMLOutput xmlOutput) throws IOException {
-        writeXML(xmlOutput, null, false);
+        writeXML(xmlOutput, null, false,0);
     }
 
     public int getCWEid() {
@@ -1962,12 +1962,28 @@ public class BugInstance implements Comparable<BugInstance>, XMLWriteable, Clone
         BugCode bugCode = pattern.getBugCode();
         return bugCode.getCWEid();
     }
-    public void writeXML(XMLOutput xmlOutput, BugCollection bugCollection, boolean addMessages) throws IOException {
+    public void writeXML(XMLOutput xmlOutput, BugCollection bugCollection, boolean addMessages,int id) throws IOException {
         XMLAttributeList attributeList = new XMLAttributeList().addAttribute("type", type).addAttribute("priority",
                 String.valueOf(priority));
 
         // Always add the rank attribute.
         attributeList.addAttribute("rank", Integer.toString(getBugRank()));
+
+        //add id
+     //   id+=1;
+        String s=Integer.toString(id);
+        String ID="";
+        if(s.length()<5) {
+            for(int i=0;i<5-s.length();i++){
+                ID+="0";
+            }
+            ID+=s;
+        }
+        else if(s.length()>5){
+            System.out.print("too many bugs");
+        }
+        else ID=s;
+        attributeList.addAttribute("ID",ID);
 
         BugPattern pattern = getBugPattern();
 

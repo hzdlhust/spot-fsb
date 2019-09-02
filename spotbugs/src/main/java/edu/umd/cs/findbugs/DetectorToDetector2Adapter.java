@@ -26,6 +26,8 @@ import edu.umd.cs.findbugs.classfile.Global;
 import edu.umd.cs.findbugs.classfile.IAnalysisCache;
 import edu.umd.cs.findbugs.log.Profiler;
 
+import java.io.IOException;
+
 /**
  * An adapter allowing classes implementing the Detector interface to support
  * the new Detector2 interface.
@@ -51,7 +53,7 @@ public class DetectorToDetector2Adapter implements Detector2 {
      * @see edu.umd.cs.findbugs.Detector2#finishPass()
      */
     @Override
-    public void finishPass() {
+    public void finishPass() throws IOException {
         detector.report();
     }
 

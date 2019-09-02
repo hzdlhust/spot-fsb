@@ -25,8 +25,9 @@ import edu.umd.cs.findbugs.ba.ClassContext;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.InstructionHandle;
 
+import java.io.IOException;
 import java.util.*;
-
+import com.h3xstream.findsecbugs.CreateWorkFlow;
 /**
  * Used to represent location of a taint sink
  * 
@@ -131,7 +132,7 @@ public class InjectionSink {
      * @param taintedInsideMethod true if not influenced by method arguments
      * @return new bug instance filled with information
      */
-    public BugInstance generateBugInstance(boolean taintedInsideMethod) {
+    public BugInstance generateBugInstance(boolean taintedInsideMethod) throws IOException {
         BugInstance bug = new BugInstance(detector, bugType, originalPriority);
         bug.addClassAndMethod(classContext.getJavaClass(), method);
         bug.addSourceLine(SourceLineAnnotation.fromVisitedInstruction(classContext, method, instructionHandle));
@@ -177,6 +178,8 @@ public class InjectionSink {
         for (SourceLineAnnotation sourceLine : lines) {
             bug.addSourceLine(sourceLine);
         }
+   //   CreateWorkFlow workflow=new CreateWorkFlow();
+    //  workflow.generateWorkFlow(bug);
         return bug;
     }
 

@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.detect;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -244,7 +245,11 @@ public class UnreadFields extends OpcodeStackDetector {
 
         // System.out.println(getDottedClassName() + " is serializable: " +
         // isSerializable);
-        super.visit(obj);
+        try {
+            super.visit(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean classHasParameter(JavaClass obj) {
