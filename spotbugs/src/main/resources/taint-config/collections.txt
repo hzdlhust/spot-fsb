@@ -9,7 +9,7 @@ java/util/Collection.removeIf(Ljava/util/function/Predicate;)Z:1#1
 java/util/Collection.retainAll(Ljava/util/Collection;)Z:1
 java/util/Collection.toArray()[Ljava/lang/Object;:0
 java/util/Collection.toArray([Ljava/lang/Object;)[Ljava/lang/Object;:1
-
+org/owasp/benchmark/helpers/ThingInterface.doSomething(Ljava/lang/String;)Ljava/lang/String;:0
 
 
 

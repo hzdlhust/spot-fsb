@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.detect;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -68,7 +69,7 @@ public class FindUnsyncGet extends BytecodeScanningDetector {
     }
 
     @Override
-    public void visit(JavaClass obj) {
+    public void visit(JavaClass obj){
         report();
         prevClassName = getDottedClassName();
     }

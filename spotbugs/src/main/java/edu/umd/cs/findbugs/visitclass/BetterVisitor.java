@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.visitclass;
 
+import java.io.IOException;
 import java.io.PrintStream;
 
 import org.apache.bcel.classfile.Attribute;
@@ -79,7 +80,7 @@ public abstract class BetterVisitor implements Visitor {
 
     // //////////////// In short form //////////////////////
     // General classes
-    public void visit(JavaClass obj) {
+    public void visit(JavaClass obj) throws IOException {
     }
 
     public void visit(ConstantPool obj) {
@@ -318,7 +319,11 @@ public abstract class BetterVisitor implements Visitor {
     // General classes
     @Override
     public void visitJavaClass(JavaClass obj) {
-        visit(obj);
+        try {
+            visit(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

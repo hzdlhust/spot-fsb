@@ -33,6 +33,7 @@ import edu.umd.cs.findbugs.classfile.MethodDescriptor;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.*;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -78,16 +79,19 @@ public abstract class AbstractTaintDetector implements Detector {
                 logException(classContext, method, e);
             } catch (RuntimeException e) {
                 logException(classContext, method, e);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void report() {
+    public void report() throws IOException {
+
     }
     
     protected void analyzeMethod(ClassContext classContext, Method method)
-            throws CheckedAnalysisException {
+            throws CheckedAnalysisException, IOException {
         TaintDataflow dataflow = getTaintDataFlow(classContext, method);
         ConstantPoolGen cpg = classContext.getConstantPoolGen();
         //method
@@ -141,5 +145,5 @@ public abstract class AbstractTaintDetector implements Detector {
     
     abstract protected void analyzeLocation(ClassContext classContext, Method method, InstructionHandle handle,
                                             ConstantPoolGen cpg, InvokeInstruction invoke, TaintFrame fact, String currentMethod)
-            throws DataflowAnalysisException;
+            throws DataflowAnalysisException, IOException;
 }

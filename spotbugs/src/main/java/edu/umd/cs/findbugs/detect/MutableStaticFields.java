@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.detect;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -136,7 +137,11 @@ public class MutableStaticFields extends BytecodeScanningDetector {
 
     @Override
     public void visit(JavaClass obj) {
-        super.visit(obj);
+        try {
+            super.visit(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int flags = obj.getAccessFlags();
         publicClass = (flags & Const.ACC_PUBLIC) != 0 && !getDottedClassName().startsWith("sun.");
 

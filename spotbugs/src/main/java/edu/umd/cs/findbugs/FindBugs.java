@@ -405,6 +405,7 @@ public abstract class FindBugs {
         int missingClassCount = findBugs.getMissingClassCount();
         int errorCount = findBugs.getErrorCount();
 
+
         if (verbose || commandLine.setExitCode()) {
             LOG.log(FINE, "Warnings generated: {0}", bugCount);
             LOG.log(FINE, "Missing classes: {0}", missingClassCount);

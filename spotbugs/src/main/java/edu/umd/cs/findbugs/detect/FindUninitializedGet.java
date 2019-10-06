@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.detect;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -70,7 +71,11 @@ public class FindUninitializedGet extends BytecodeScanningDetector implements St
         pendingBugs.clear();
         declaredFields.clear();
         containerFields.clear();
-        super.visit(obj);
+        try {
+            super.visit(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

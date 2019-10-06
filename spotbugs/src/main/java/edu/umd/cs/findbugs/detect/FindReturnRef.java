@@ -33,6 +33,8 @@ import edu.umd.cs.findbugs.ba.AnalysisContext;
 import edu.umd.cs.findbugs.ba.XField;
 import edu.umd.cs.findbugs.bcel.OpcodeStackDetector;
 
+import java.io.IOException;
+
 public class FindReturnRef extends OpcodeStackDetector {
     boolean check = false;
 
@@ -65,7 +67,11 @@ public class FindReturnRef extends OpcodeStackDetector {
     @Override
     public void visit(JavaClass obj) {
         publicClass = obj.isPublic();
-        super.visit(obj);
+        try {
+            super.visit(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

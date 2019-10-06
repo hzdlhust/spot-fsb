@@ -22,6 +22,8 @@ package edu.umd.cs.findbugs;
 import edu.umd.cs.findbugs.classfile.CheckedAnalysisException;
 import edu.umd.cs.findbugs.classfile.ClassDescriptor;
 
+import java.io.IOException;
+
 /**
  * Detector interface for new bytecode-framework-neutral architecture.
  *
@@ -42,7 +44,7 @@ public interface Detector2 extends Priorities {
     /**
      * This method is called at the end of the analysis pass.
      */
-    public void finishPass();
+    public void finishPass() throws IOException;
 
     /**
      * Get the name of the detector class.

@@ -77,7 +77,7 @@ import edu.umd.cs.findbugs.plan.ExecutionPlan;
 import edu.umd.cs.findbugs.plan.OrderingConstraintException;
 import edu.umd.cs.findbugs.util.ClassName;
 import edu.umd.cs.findbugs.util.TopologicalSort.OutEdges;
-
+import edu.umd.cs.findbugs.BaseInformation;
 /**
  * FindBugs driver class. Orchestrates the analysis of a project, collection of
  * results, etc.
@@ -306,6 +306,10 @@ public class FindBugs2 implements IFindBugsEngine, AutoCloseable {
             bugReporter.reportQueuedErrors();
             throw e;
         }
+        BaseInformation baseInformation=new BaseInformation();
+        baseInformation.saveSrcInfo(appClassList.size());
+        baseInformation.savePriorityInfo();
+        baseInformation.saveBugInfo();
     }
 
     /**
@@ -1137,7 +1141,11 @@ public class FindBugs2 implements IFindBugsEngine, AutoCloseable {
 
                 // Call finishPass on each detector
                 for (Detector2 detector : detectorList) {
-                    detector.finishPass();
+                    try {
+                        detector.finishPass();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 progressReporter.finishPerClassAnalysis();
@@ -1185,6 +1193,7 @@ public class FindBugs2 implements IFindBugsEngine, AutoCloseable {
         bugReporter.logError(
                 "Exception analyzing " + classDescriptor.toDottedClassName() + " using detector "
                         + detector.getDetectorClassName(), e);
+
     }
 
     public static void main(String[] args) throws Exception {

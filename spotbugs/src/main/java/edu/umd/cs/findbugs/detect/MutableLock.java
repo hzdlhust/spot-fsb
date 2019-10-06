@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.detect;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,7 +49,11 @@ public class MutableLock extends BytecodeScanningDetector implements StatelessDe
     @Override
     public void visit(JavaClass obj) {
         finalFields.clear();
-        super.visit(obj);
+        try {
+            super.visit(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

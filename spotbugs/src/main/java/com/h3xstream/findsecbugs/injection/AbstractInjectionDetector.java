@@ -35,6 +35,7 @@ import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.InvokeInstruction;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -57,7 +58,7 @@ public abstract class AbstractInjectionDetector extends AbstractTaintDetector {
      * Once the analysis is completed, all the collected sinks are reported as bugs.
      */
     @Override
-    public void report() {
+    public void report() throws IOException {
         // collect sinks and report each once
         Set<InjectionSink> injectionSinksToReport = new HashSet<InjectionSink>();
         for (Set<InjectionSink> injectionSinkSet : injectionSinks.values()) {
@@ -73,7 +74,7 @@ public abstract class AbstractInjectionDetector extends AbstractTaintDetector {
     @Override
     protected void analyzeLocation(ClassContext classContext, Method method, InstructionHandle handle,
                                    ConstantPoolGen cpg, InvokeInstruction invoke, TaintFrame fact, String currentMethod)
-            throws DataflowAnalysisException {
+            throws DataflowAnalysisException, IOException {
             SourceLineAnnotation sourceLine = SourceLineAnnotation.fromVisitedInstruction(classContext, method, handle);
             checkSink(cpg, invoke, fact, sourceLine, currentMethod);
             InjectionPoint injectionPoint = getInjectionPoint(invoke, cpg, handle);

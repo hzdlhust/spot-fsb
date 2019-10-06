@@ -19,6 +19,7 @@
 
 package edu.umd.cs.findbugs.detect;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -308,7 +309,7 @@ public class FindNoSideEffectMethods extends OpcodeStackDetector implements NonR
     }
 
     @Override
-    public void visit(JavaClass obj) {
+    public void visit(JavaClass obj) throws IOException {
         super.visit(obj);
         allowedFields = new HashSet<>();
         fieldsModifyingMethods = new HashSet<>();

@@ -144,6 +144,7 @@ public class LaunchAppropriateUI {
      */
     private int getLaunchProperty() {
         // See if the first command line argument specifies the UI.
+
         if (args.length > 0) {
             String firstArg = args[0];
             if (firstArg.startsWith("-")) {
@@ -194,6 +195,7 @@ public class LaunchAppropriateUI {
      * @throws java.lang.Exception
      */
     public static void main(String args[]) throws Exception {
+ //       testFile();
         LaunchAppropriateUI launcher = new LaunchAppropriateUI(args);
         launcher.launch();
     }
