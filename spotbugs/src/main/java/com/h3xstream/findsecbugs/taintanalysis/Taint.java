@@ -33,6 +33,7 @@ import java.util.*;
  * @author David Formanek (Y Soft Corporation, a.s.)
  */
 public class Taint {
+
     //用于保存fields状态
     public Map<String, State> fields;
 
@@ -128,7 +129,7 @@ public class Taint {
     private String potentialValue;
     private String debugInfo = null;
     private Set<UnknownSource> sources = new HashSet<>();
-    private int constInt;
+    private int constInt = Integer.MIN_VALUE;
 
     /**
      * Constructs a new empty instance of Taint with the specified state
@@ -165,7 +166,8 @@ public class Taint {
     }
 
 
-
+    public int setConstInt(int x){this.constInt = x; return constInt;}
+    public int getConstInt(){return constInt;}
     public void clearsources(){
         this.sources.clear();
     }
@@ -201,6 +203,7 @@ public class Taint {
         this.innerList =(taint.innerList!=null)? new ArrayList<State>(taint.innerList):null;
         this.innerArray = (taint.innerArray!=null)?new HashMap<Integer, State>(taint.innerArray):null;
         this.innerList = taint.innerList;
+        this.constInt = taint.constInt;
     }
 
     /**

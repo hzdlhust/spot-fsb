@@ -23,7 +23,9 @@ import java.util.Iterator;
 
 import javax.annotation.CheckForNull;
 
-import org.apache.bcel.generic.InstructionHandle;
+import com.h3xstream.findsecbugs.taintanalysis.Taint;
+import com.h3xstream.findsecbugs.taintanalysis.TaintFrame;
+import org.apache.bcel.generic.*;
 
 import edu.umd.cs.findbugs.SystemProperties;
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
@@ -130,10 +132,11 @@ public abstract class AbstractDataflowAnalysis<Fact> extends BasicAbstractDatafl
                 if (DEBUG && end == null) {
                     System.out.print("Transfer " + handle);
                 }
-
+                //判断分支
+                judgeBranch(basicBlock,handle,result);
+                if((result instanceof TaintFrame)&&(!basicBlock.getBeExce()))  ((TaintFrame) result).setVaildFrame(false);
                 // Transfer the dataflow value
                 transferInstruction(handle, basicBlock, result);
-
                 if (DEBUG && end == null) {
                     System.out.println(" ==> " + result.toString());
                 }
@@ -141,5 +144,105 @@ public abstract class AbstractDataflowAnalysis<Fact> extends BasicAbstractDatafl
         }
     }
 
+
+    private void judgeBranch(BasicBlock basicBlock,InstructionHandle handle,Fact fact){
+
+        if(!(fact instanceof TaintFrame)) return;
+
+        Instruction ins = handle.getInstruction();
+        TaintFrame tf = (TaintFrame)fact;
+
+        int first,second;
+        boolean branchSuccess = false;
+        int target = -1;
+        TABLESWITCH ts = null;
+        if(ins instanceof TABLESWITCH){
+            if(!(ins instanceof  TABLESWITCH)) return;
+            try{
+                basicBlock.setHaveBranch(true);
+                String s = tf.getStackValue(0).getConstantValue();
+                if(s == null || s == "") return;
+                ts = (TABLESWITCH) ins;
+                int[] tsmatch = ts.getMatchs();
+                int tsbranchtarget = -1;
+                boolean tsbranchSuccess = true;
+                InstructionHandle[] tstargets = ts.getTargets();
+                InstructionHandle tstarget = ts.getTarget();
+                int len = tsmatch.length;
+                for(int i = 0 ; i < len ; i++){
+                    if(s.charAt(0) == tsmatch[i]){
+                        tsbranchtarget = tstargets[i].getPosition();
+                        break;
+                    }
+                }
+                if(tsbranchtarget == -1) tsbranchtarget = tstarget.getPosition();
+                basicBlock.setBranchSeccess(tsbranchSuccess);
+                basicBlock.setBranchAddress(tsbranchtarget);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        if(!(ins instanceof IfInstruction)) return;
+        basicBlock.setHaveBranch(true);
+        try{
+            if(tf.getStackDepth()<2) return;
+            first = tf.getStackValue(1).getConstInt();
+            second = tf.getStackValue(0).getConstInt();
+            if(first == Integer.MIN_VALUE || second == Integer.MIN_VALUE){
+                basicBlock.setBranchAddress(target);
+                basicBlock.setBranchSeccess(false);
+                return;
+            }
+            branchSuccess = true;
+            int target1 = handle.getNext().getPosition();
+            int target2 = ((IF_ICMPLE) ins).getTarget().getPosition();
+            if(ins instanceof IF_ICMPLE){
+                if(first <= second){
+                    target=target2;
+                }else {
+                    target = target1;
+                }
+            }else if(ins instanceof IF_ICMPLT){
+                if(first < second){
+                    target=target2;
+                }else {
+                    target = target1;
+                }
+            }else if(ins instanceof IF_ICMPGT){
+                if(first > second){
+                    target=target2;
+                }else {
+                    target = target1;
+                }
+            }else if(ins instanceof  IF_ICMPGE){
+                if(first >= second){
+                    target=target2;
+                }else {
+                    target = target1;
+                }
+            }else if(ins instanceof IF_ICMPEQ){
+                if(first == second){
+                    target=target2;
+                }else {
+                    target = target1;
+                }
+            }else if(ins instanceof IF_ICMPNE){
+                if(first != second){
+                    target=target2;
+                }else {
+                    target = target1;
+                }
+            }else {
+                branchSuccess = false;
+                target = -1;
+            }
+            basicBlock.setBranchSeccess(branchSuccess);
+            basicBlock.setBranchAddress(target);
+        }catch (Exception e){
+
+        }
+
+    }
 }
 
