@@ -21,6 +21,8 @@ package edu.umd.cs.findbugs;
 
 import java.awt.GraphicsEnvironment;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,6 +62,12 @@ public class LaunchAppropriateUI {
      */
     public static final int SHOW_VERSION = 1001;
 
+    /**
+    *Get time.
+     */
+    public static String  startTime;
+    public static String  endTime;
+    public int index;
     /**
      * Map of UI name strings to integer UI codes.
      */
@@ -103,6 +111,22 @@ public class LaunchAppropriateUI {
         int launchProperty = getLaunchProperty();
 
         if (GraphicsEnvironment.isHeadless() || launchProperty == TEXTUI) {
+            //处理字符串
+            AnalyseCommand analyseCommand=new AnalyseCommand(args);
+
+            if(analyseCommand.isBugreporterLocation&&AnalyseCommand.isSelectBugTypes){
+                index=4;
+            }
+            else if(!AnalyseCommand.isBugreporterLocation&&!AnalyseCommand.isSelectBugTypes){
+                index=0;
+            }
+            else index=2;
+            if(index!=0){
+            String[] copyArgs=new String[args.length-index];
+            for(int i=0;i<args.length-index;i++){
+                copyArgs[i]=args[i];
+            }
+            args=copyArgs.clone();}
             FindBugs2.main(args);
         } else if (launchProperty == SHOW_HELP) {
             ShowHelp.main(args);
@@ -196,7 +220,15 @@ public class LaunchAppropriateUI {
      */
     public static void main(String args[]) throws Exception {
  //       testFile();
+        Date start = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        startTime= dateFormat.format( start );
         LaunchAppropriateUI launcher = new LaunchAppropriateUI(args);
         launcher.launch();
+        Date end=new Date();
+        SimpleDateFormat dateFormatEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        endTime=dateFormatEnd.format(end);
+        if(launcher.index!=0){
+        SaveBugReporter saveBugReporter=new SaveBugReporter();}
     }
 }

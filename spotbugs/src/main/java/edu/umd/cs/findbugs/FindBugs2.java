@@ -306,10 +306,12 @@ public class FindBugs2 implements IFindBugsEngine, AutoCloseable {
             bugReporter.reportQueuedErrors();
             throw e;
         }
-        BaseInformation baseInformation=new BaseInformation();
+     /*  BaseInformation baseInformation=new BaseInformation();
         baseInformation.saveSrcInfo(appClassList.size());
         baseInformation.savePriorityInfo();
-        baseInformation.saveBugInfo();
+        baseInformation.saveBugInfo();*/
+        BaseInformation baseInformation=new BaseInformation();
+        baseInformation.setClassFiles(appClassList.size());
     }
 
     /**

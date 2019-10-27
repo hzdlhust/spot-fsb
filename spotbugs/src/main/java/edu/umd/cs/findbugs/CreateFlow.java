@@ -15,6 +15,7 @@ public class CreateFlow extends JPanel{
     public int id;
     public Graphics tg = null;
     public BufferedImage bi;
+
     public CreateFlow(BugInstance bugInstance,int id){
         this.bugInstance=bugInstance;
         this.id=id;
@@ -63,9 +64,6 @@ public class CreateFlow extends JPanel{
                 sourceLineAnnotation=(SourceLineAnnotation) annotation;
                 g.drawRect(baseX,y+70,width,height);
                 String str=sourceLineAnnotation.toString();
-              /*  String str=sourceLineAnnotation.getSourceFile();
-                int startLine=sourceLineAnnotation.getStartLine();
-                str=str+"   Line："+startLine;*/
                 g.drawString(str,baseX+20,y+70+20);
                 y=y+70;
                 if(temp){
@@ -98,33 +96,15 @@ public class CreateFlow extends JPanel{
         }
     }
 
-    public void saveFile(){
-       // String directoryName="H:\\FirstProject\\IdeaProject\\spot-fsb\\spotbugs";
-        String directoryName=System.getProperty("user.dir");
-        directoryName=directoryName+"\\repoters";
-        File file=new File(directoryName);
-        if(!file.exists()){
-                file.mkdir();
-        }
-
+   public void saveFile(){
+        String directoryName=AnalyseCommand.bugreporterLocation;
         String categoryName=directoryName+"\\images";
         File dirCategory=new File(categoryName);
         if(!dirCategory.exists()){
             dirCategory.mkdir();
         }
 
-        String s=Integer.toString(id);
-        String fileName="";
-        if(s.length()<5) {
-            for(int i=0;i<5-s.length();i++){
-                fileName+="0";
-            }
-            fileName+=s;
-        }
-        else if(s.length()>5){
-            System.out.print("too many bugs");
-        }
-        else fileName=s;
+        String fileName=bugInstance.getType();
         File oFile=new File(categoryName+"\\"+fileName+".jpg");
         if( !oFile.exists() )
         {
@@ -151,6 +131,7 @@ public class CreateFlow extends JPanel{
         jf.add(save);
         jf.setVisible(true);
         jf.setVisible(false);
+        jf.dispose();
         save.init();
     }
 

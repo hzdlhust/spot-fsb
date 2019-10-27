@@ -546,17 +546,15 @@ public class SortedBugCollection implements BugCollection {
                 if (!applySuppressions || !project.getSuppressionFilter().match(bugInstance)) {
                     id++;
                     bugInstance.writeXML(xmlOutput, this, withMessages,id);
-                    //基本消息
-                    BaseInformation baseInformation=new BaseInformation();
-                    baseInformation.PriorityInfo(bugInstance);
-                    baseInformation.BugInfo(bugInstance);
-                    baseInformation.saveDetailText(bugInstance,id);
-                    //保存图片
-                    CreateFlow createFlow=new CreateFlow();
-                    createFlow.setWindows(bugInstance,id);
-//                    CreateWorkFlow createWorkFlow=new CreateWorkFlow();
-//                    createWorkFlow.generateWorkFlow(bugInstance,id);
+                    //为真的时候才选择了需要报告信息
+                    if(AnalyseCommand.isBugreporterLocation) {
+                        CreateFlow createFlow = new CreateFlow();
+                        createFlow.setWindows(bugInstance, id);
 
+                        BaseInformation baseInformation = new BaseInformation();
+                        baseInformation.PriorityInfo(bugInstance);
+                        baseInformation.BugInfo(bugInstance);
+                    }
                 }
             }
 
