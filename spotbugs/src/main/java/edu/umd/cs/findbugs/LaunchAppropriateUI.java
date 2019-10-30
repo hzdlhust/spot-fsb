@@ -123,9 +123,11 @@ public class LaunchAppropriateUI {
             else index=2;
             if(index!=0){
             String[] copyArgs=new String[args.length-index];
-            for(int i=0;i<args.length-index;i++){
+            int i=0;
+            for(i=0;i<args.length-index-1;i++){
                 copyArgs[i]=args[i];
             }
+            copyArgs[i]=args[args.length-1];
             args=copyArgs.clone();}
             FindBugs2.main(args);
         } else if (launchProperty == SHOW_HELP) {

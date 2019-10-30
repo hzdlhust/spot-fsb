@@ -13,7 +13,7 @@ public class AnalyseCommand {
         int argsCount = commandLine.length;
         for(int i=0;i<argsCount;i++){
             String a=commandLine[i];
-            if(a.charAt(0)=='+'){
+            /*if(a.charAt(0)=='+'){
                 if(a.substring(1).equals("bugTypes")&&i+1<argsCount){
                     bugTypes=commandLine[i+1];
                     isSelectBugTypes=true;
@@ -24,6 +24,16 @@ public class AnalyseCommand {
                     isBugreporterLocation=true;
                     i++;
                 }
+            }*/
+            if(a.equals("-bugTypes")){
+                bugTypes=commandLine[i+1];
+                isSelectBugTypes=true;
+                i++;
+            }
+            else if(a.equals("-location")){
+                bugreporterLocation=commandLine[i+1];
+                isBugreporterLocation=true;
+                i++;
             }
         }
         if(!isSelectBugTypes){
