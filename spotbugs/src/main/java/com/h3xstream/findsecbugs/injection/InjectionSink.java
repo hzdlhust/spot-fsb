@@ -27,7 +27,7 @@ import org.apache.bcel.generic.InstructionHandle;
 
 import java.io.IOException;
 import java.util.*;
-import com.h3xstream.findsecbugs.CreateWorkFlow;
+
 /**
  * Used to represent location of a taint sink
  * 

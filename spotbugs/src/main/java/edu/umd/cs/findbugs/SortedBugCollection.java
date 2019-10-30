@@ -56,7 +56,6 @@ import javax.annotation.WillClose;
 import javax.annotation.WillNotClose;
 import javax.xml.transform.TransformerException;
 
-import com.h3xstream.findsecbugs.CreateWorkFlow;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
