@@ -26,6 +26,7 @@ import java.util.NoSuchElementException;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.bcel.Const;
 import org.apache.bcel.generic.CodeExceptionGen;
 import org.apache.bcel.generic.InstructionHandle;
@@ -88,6 +89,12 @@ public class BasicBlock extends AbstractVertex<Edge, BasicBlock> implements Debu
      * ----------------------------------------------------------------------
      */
 
+    //tag for branch result;
+    private boolean haveBranch = false;
+    private boolean branchSuccess = false;
+    private int branchAddress = -1;
+    private boolean beExce = true;
+
     private InstructionHandle firstInstruction;
 
     private InstructionHandle lastInstruction;
@@ -119,6 +126,18 @@ public class BasicBlock extends AbstractVertex<Edge, BasicBlock> implements Debu
         this.inJSRSubroutine = false;
         this.numNonExceptionSuccessors = -1;
     }
+
+    public void setBeExce(boolean beExce) {
+        this.beExce = beExce;
+    }
+
+    public boolean getBeExce(){return beExce;}
+    public boolean isHaveBranch(){return haveBranch;}
+    public boolean setHaveBranch(boolean haveBranch){this.haveBranch = haveBranch;return this.haveBranch;}
+    public boolean isBranchSuccess(){return branchSuccess;}
+    public boolean setBranchSeccess(boolean state){branchSuccess = state; return branchSuccess;}
+    public int setBranchAddress(int branchAddress){this.branchAddress = branchAddress; return branchAddress;}
+    public int getBranchAddress(){return branchAddress;}
 
     public boolean isInJSRSubroutine() {
         return inJSRSubroutine;

@@ -174,19 +174,22 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
         }
     }
 
+
     @Override
     public void visitBIPUSH(BIPUSH obj) {
         Taint taint = new Taint(Taint.State.SAFE);
+        taint.setConstInt(Integer.parseInt(obj.getValue().toString()));
         // assume each pushed byte is a char
-        taint.setConstantValue(String.valueOf(obj.getValue()));
+        taint.setConstantValue(obj.getValue().toString());
         getFrame().pushValue(taint);
     }
 
     @Override
     public void visitSIPUSH(SIPUSH obj) {
         Taint taint = new Taint(Taint.State.SAFE);
+        taint.setConstInt(Integer.parseInt(obj.getValue().toString()));
         // assume each pushed short is a char (for non-ASCII characters)
-        taint.setConstantValue(String.valueOf((char) obj.getValue().shortValue()));
+        taint.setConstantValue(obj.getValue().toString());
         getFrame().pushValue(taint);
     }
 
@@ -232,7 +235,8 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
     @Override
     public void visitICONST(ICONST obj) {
         Taint t = new Taint(Taint.State.SAFE);
-        t.setConstantValue(String.valueOf(obj.getValue()));
+        t.setConstantValue(obj.getValue().toString());
+        t.setConstInt(Integer.parseInt(obj.getValue().toString()));
         if (FindSecBugsGlobalConfig.getInstance().isDebugTaintState()) {
             t.setDebugInfo("" + obj.getValue().intValue());
         }
@@ -308,8 +312,83 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
     }
 
     @Override
+    public void visitIADD(IADD obj){
+        Taint taint = new Taint(Taint.State.SAFE);
+        int fn,sn,res;
+        try{
+            sn = getFrame().popValue().getConstInt();
+            fn = getFrame().popValue().getConstInt();
+            if(sn!=Integer.MIN_VALUE && fn != Integer.MIN_VALUE)
+                res = fn + sn;
+            else
+                res = Integer.MIN_VALUE;
+            taint.setConstInt(res);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        getFrame().pushValue(taint);
+    }
+
+    @Override
+    public void visitISUB(ISUB obj){
+        Taint taint = new Taint(Taint.State.SAFE);
+        int fn,sn,res;
+        try{
+            sn = getFrame().popValue().getConstInt();
+            fn = getFrame().popValue().getConstInt();
+            if(sn!=Integer.MIN_VALUE && fn != Integer.MIN_VALUE)
+                res = fn - sn;
+            else
+                res = Integer.MIN_VALUE;
+            taint.setConstInt(res);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        getFrame().pushValue(taint);
+
+    }
+
+    @Override
+    public void visitIMUL(IMUL obj){
+        Taint taint = new Taint(Taint.State.SAFE);
+        int fn,sn,res;
+        try{
+            sn = getFrame().popValue().getConstInt();
+            fn = getFrame().popValue().getConstInt();
+            if(sn!=Integer.MIN_VALUE && fn != Integer.MIN_VALUE)
+                res = fn * sn;
+            else
+                res = Integer.MIN_VALUE;
+            taint.setConstInt(res);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        getFrame().pushValue(taint);
+    }
+
+    @Override
+    public void visitIDIV(IDIV obj){
+        Taint taint = new Taint(Taint.State.SAFE);
+        int fn,sn,res;
+        try{
+            sn = getFrame().popValue().getConstInt();
+            fn = getFrame().popValue().getConstInt();
+            if(sn!=Integer.MIN_VALUE && fn != Integer.MIN_VALUE)
+                res = fn / sn;
+            else
+                res = Integer.MIN_VALUE;
+            taint.setConstInt(res);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        getFrame().pushValue(taint);
+    }
+
+
+    @Override
     public void handleStoreInstruction(StoreInstruction obj) {
         try {
+            boolean vaild = getFrame().isVaildFrame();
             int numConsumed = obj.consumeStack(cpg);
             if (numConsumed == Const.UNPREDICTABLE) {
                 throw new InvalidBytecodeException("Unpredictable stack consumption");
@@ -318,6 +397,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
             while (numConsumed-- > 0) {
                 Taint value = new Taint(getFrame().popValue());
                 value.setVariableIndex(index);
+                if(!vaild) value.setState(Taint.State.SAFE);
                 getFrame().setValue(index++, value);
             }
         } catch (DataflowAnalysisException ex) {
@@ -538,11 +618,41 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
     private void visitInvoke(InvokeInstruction obj) {
 //        TaintFrame tf0 = getFrame();
         assert obj != null;
+        //对于无效路径
+        if(!getFrame().isVaildFrame()){
+            int couse = getNumWordsConsumed(obj);
+            int produce = getNumWordsProduced(obj);
+            try{
+                while(couse-->0) getFrame().popValue();
+                while(produce-->0) getFrame().pushValue(new Taint(Taint.State.SAFE));
+            }catch (Exception e){
+
+            }
+            return;
+        }
         try {
             TaintMethodConfig methodConfig = getMethodConfig(obj);
             ObjectType realInstanceClass = (methodConfig == null) ?
                     null : methodConfig.getOutputTaint().getRealInstanceClass();
-            Taint taint = getMethodTaint(methodConfig);
+            Taint taint = null;
+            if(methodConfig == null){
+                int sumArg = 0;
+                Type[] types = obj.getArgumentTypes(cpg);
+                for(Type et: types){
+                    sumArg += et.getSize();
+                }
+
+                for(int i = 0 ; i < sumArg; i++){
+                    if(i<getFrame().getStackDepth())
+                        taint = Taint.merge(taint,getFrame().getStackValue(i));
+                }
+                if(!(obj.copy() instanceof INVOKESTATIC)){
+                    taint = Taint.merge(taint,getFrame().getStackValue(sumArg));
+                }
+                if(taint == null) taint = getDefaultValue();
+            }else{
+                        taint = getMethodTaint(methodConfig);
+            }
             assert taint != null;
             if (FindSecBugsGlobalConfig.getInstance().isDebugTaintState()) {
                 taint.setDebugInfo(obj.getMethodName(cpg) + "()"); //TODO: Deprecated debug info
@@ -644,7 +754,14 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
                         taint.setConstantValue(str1 + str0);
                     else
                         taint.setConstantValue("");
-                } else {
+                }
+                else if(mName.contains("charAt")){
+                    int idx =  tf.getStackValue(0).getConstInt();
+                    String str = tf.getStackValue(1).getConstantValue();
+                    if(str != null && idx != Integer.MIN_VALUE && idx<str.length() && idx>=0){
+                        taint.setConstantValue(String.valueOf(str.charAt(idx)));
+                    }
+                }else {
                     taint.setConstantValue("");
                 }
             } catch (Exception e) {

@@ -76,7 +76,15 @@ public class TaintAnalysis extends FrameDataflowAnalysis<Taint, TaintFrame> {
     @Override
     protected void mergeValues(TaintFrame frame, TaintFrame result, int i)
             throws DataflowAnalysisException {
-        result.setValue(i, Taint.merge(result.getValue(i), frame.getValue(i)));
+        if(!frame.isVaildFrame() || !result.isVaildFrame()){
+            int j = 0;
+        }
+        //result.setVaildFrame(frame.isVaildFrame()||result.isVaildFrame());
+        if(!frame.isVaildFrame()) return;
+        else if(!result.isVaildFrame()) result.setValue(i,frame.getValue(i));
+        else result.setValue(i, Taint.merge(result.getValue(i), frame.getValue(i)));
+        if(i == frame.getNumSlots()-1)
+            result.setVaildFrame(frame.isVaildFrame()||result.isVaildFrame());
     }
 
     @Override
@@ -85,6 +93,7 @@ public class TaintAnalysis extends FrameDataflowAnalysis<Taint, TaintFrame> {
         visitor.setFrameAndLocation(fact, new Location(handle, block));
         visitor.analyzeInstruction(handle.getInstruction());
     }
+
 
     @Override
     public TaintFrame createFact() {

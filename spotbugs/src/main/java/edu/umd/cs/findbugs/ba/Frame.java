@@ -64,6 +64,8 @@ import edu.umd.cs.findbugs.SystemProperties;
  */
 public abstract class Frame<ValueType> {
 
+    private boolean isVaildFrame;
+
     // //////////////////////////////////////////////////////////////////////////////////
     // Instance variables
     // //////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +117,7 @@ public abstract class Frame<ValueType> {
         for (int i = 0; i < numLocals; ++i) {
             slotList.add(null);
         }
+        isVaildFrame = true;
     }
 
     /**
@@ -123,6 +126,15 @@ public abstract class Frame<ValueType> {
      */
     public boolean isTop() {
         return isTop;
+    }
+
+    public boolean isVaildFrame(){
+        return isVaildFrame;
+    }
+
+    public boolean setVaildFrame(boolean state){
+        isVaildFrame = state;
+        return isVaildFrame;
     }
 
     public ArrayList<ValueType> getSlotList(){
@@ -612,6 +624,7 @@ public abstract class Frame<ValueType> {
         slotList = new ArrayList<>(other.slotList);
         isTop = other.isTop;
         isBottom = other.isBottom;
+        isVaildFrame = other.isVaildFrame;
     }
 
     private static final boolean STACK_ONLY = SystemProperties.getBoolean("dataflow.stackonly");

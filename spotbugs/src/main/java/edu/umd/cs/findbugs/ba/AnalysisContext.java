@@ -38,7 +38,7 @@ import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.JavaClass;
 
 import edu.umd.cs.findbugs.AbstractBugReporter;
-import edu.umd.cs.findbugs.AnalysisCacheToRepositoryAdapter;
+import edu.umd.cs.findbugs.*;
 import edu.umd.cs.findbugs.AnalysisLocal;
 import edu.umd.cs.findbugs.BugInstance.NoSuchBugPattern;
 import edu.umd.cs.findbugs.Project;

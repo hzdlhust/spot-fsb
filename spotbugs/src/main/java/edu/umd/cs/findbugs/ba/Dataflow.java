@@ -24,6 +24,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import com.h3xstream.findsecbugs.taintanalysis.Taint;
+import com.h3xstream.findsecbugs.taintanalysis.TaintFrame;
 import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.MethodGen;
 
@@ -141,7 +143,7 @@ public class Dataflow<Fact, AnalysisType extends DataflowAnalysis<Fact>> {
      */
     public void execute() throws DataflowAnalysisException {
         boolean change;
-        boolean debugWas = DEBUG;
+         boolean debugWas = DEBUG;
         if (DEBUG) {
             reportAnalysis("Executing");
         }
@@ -229,11 +231,11 @@ public class Dataflow<Fact, AnalysisType extends DataflowAnalysis<Fact>> {
             // For each block in CFG...
 
             while (i.hasNext()) {
-
+                //
                 BasicBlock block = i.next();
-
                 // Get start fact for block.
-                Fact start = analysis.getStartFact(block);
+                 Fact start = analysis.getStartFact(block);
+
                 assert start != null;
 
                 boolean needToRecompute = false;
@@ -299,6 +301,36 @@ public class Dataflow<Fact, AnalysisType extends DataflowAnalysis<Fact>> {
                             }
                         }
                     }
+
+                    predEdgeIter = logicalPredecessorEdgeIterator(block);
+                    boolean beExce = false;
+                    while(predEdgeIter.hasNext()){
+                        Edge edge = predEdgeIter.next();
+                        BasicBlock logicalPred = isForwards ? edge.getSource() : edge.getTarget();
+                        if(block.getFirstInstruction() == null) break;
+                            //前一个块是否有分支
+                            if(logicalPred.isHaveBranch()){
+                                int branchTarget = logicalPred.getBranchAddress();
+                                boolean branchResult = logicalPred.isBranchSuccess();
+                                int currentPC = block.getFirstInstruction().getPosition();
+                                if(branchTarget == -1 || branchResult == false){
+                                    //无法判断分支情况
+                                    beExce = true;
+                                }
+                                else if(currentPC != branchTarget){
+                                    //不会执行
+                                    beExce = false;
+                                }else{
+                                    beExce = true;
+                                }
+                            }else{
+                                beExce = block.getBeExce() || logicalPred.getBeExce();
+//                                beExce = logicalPred.getBeExce();
+                            }
+
+                        block.setBeExce(beExce);
+                    }
+
                     if (predCount == 0) {
                         needToRecompute = true;
                     }
@@ -315,6 +347,13 @@ public class Dataflow<Fact, AnalysisType extends DataflowAnalysis<Fact>> {
 
                         // Get the predecessor result fact
                         Fact predFact = analysis.getResultFact(logicalPred);
+                        if(predFact instanceof TaintFrame){
+                            //前一块不会被执行，前一块输出应该为安全
+                            if(!logicalPred.getBeExce()){
+                                TaintFrame tf = (TaintFrame) predFact;
+
+                            }
+                        }
 
                         // Apply the edge transfer function.
                         Fact edgeFact = analysis.createFact();
