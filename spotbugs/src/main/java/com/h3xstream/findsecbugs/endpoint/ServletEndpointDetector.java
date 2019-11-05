@@ -17,12 +17,11 @@
  */
 package com.h3xstream.findsecbugs.endpoint;
 
-import edu.umd.cs.findbugs.BugInstance;
-import edu.umd.cs.findbugs.BugReporter;
-import edu.umd.cs.findbugs.OpcodeStack;
-import edu.umd.cs.findbugs.Priorities;
+import edu.umd.cs.findbugs.*;
 import edu.umd.cs.findbugs.bcel.OpcodeStackDetector;
 import org.apache.bcel.Const;
+//import org.apache.bcel.generic.ALOAD;
+//import org.graalvm.compiler.nodes.spi.ArithmeticLIRLowerable;
 
 /**
  * This detector cover the Servlet/HttpServlet API which give access to user input.
@@ -60,50 +59,55 @@ public class ServletEndpointDetector extends OpcodeStackDetector {
                     getNameConstantOperand().equals("getParameterValues") ||
                     getNameConstantOperand().equals("getParameterMap") ||
                     getNameConstantOperand().equals("getParameterNames")) {
+                    bugReporter.reportBug(new BugInstance(this, GET_PARAMETER_TYPE, Priorities.LOW_PRIORITY) //
+                            .addClass(this).addMethod(this).addSourceLine(this)
+                            .addString(getNameConstantOperand())); //Passing the method name
+                } else if (getNameConstantOperand().equals("getContentType")) {
 
-                bugReporter.reportBug(new BugInstance(this, GET_PARAMETER_TYPE, Priorities.LOW_PRIORITY) //
-                        .addClass(this).addMethod(this).addSourceLine(this)
-                        .addString(getNameConstantOperand())); //Passing the method name
-            } else if (getNameConstantOperand().equals("getContentType")) {
+                    bugReporter.reportBug(new BugInstance(this, CONTENT_TYPE, Priorities.LOW_PRIORITY) //
+                            .addClass(this).addMethod(this).addSourceLine(this));
+               } else if (getNameConstantOperand().equals("getServerName")) {
 
-                bugReporter.reportBug(new BugInstance(this, CONTENT_TYPE, Priorities.LOW_PRIORITY) //
-                        .addClass(this).addMethod(this).addSourceLine(this));
-            } else if (getNameConstantOperand().equals("getServerName")) {
-
-                bugReporter.reportBug(new BugInstance(this, SERVER_NAME_TYPE, Priorities.LOW_PRIORITY) //
-                        .addClass(this).addMethod(this).addSourceLine(this));
-            }
+                    bugReporter.reportBug(new BugInstance(this, SERVER_NAME_TYPE, Priorities.LOW_PRIORITY) //
+                            .addClass(this).addMethod(this).addSourceLine(this));
+                }
 
             //HttpServletRequest
 
             else if (getNameConstantOperand().equals("getRequestedSessionId")) {
-                bugReporter.reportBug(new BugInstance(this, SESSION_ID_TYPE, Priorities.LOW_PRIORITY) //
-                        .addClass(this).addMethod(this).addSourceLine(this));
-            } else if (getNameConstantOperand().equals("getQueryString")) {
 
-                bugReporter.reportBug(new BugInstance(this, QUERY_STRING_TYPE, Priorities.LOW_PRIORITY) //
-                        .addClass(this).addMethod(this).addSourceLine(this));
-            } else if (getNameConstantOperand().equals("getHeader")) {
+                    bugReporter.reportBug(new BugInstance(this, SESSION_ID_TYPE, Priorities.LOW_PRIORITY) //
+                            .addClass(this).addMethod(this).addSourceLine(this));
+                 } else if (getNameConstantOperand().equals("getQueryString")) {
+
+                    bugReporter.reportBug(new BugInstance(this, QUERY_STRING_TYPE, Priorities.LOW_PRIORITY) //
+                            .addClass(this).addMethod(this).addSourceLine(this));
+               } else if (getNameConstantOperand().equals("getHeader")) {
                 //Extract the value being push..
-                OpcodeStack.Item top = stack.getStackItem(0);
-                String value = (String) top.getConstant();//Safe see if condition
-                if ("Host".equals(value)) {
 
-                    bugReporter.reportBug(new BugInstance(this, SERVER_NAME_TYPE, Priorities.LOW_PRIORITY) //
-                            .addClass(this).addMethod(this).addSourceLine(this));
-                } else if ("Referer".equalsIgnoreCase(value)) {
+                    OpcodeStack.Item top = stack.getStackItem(0);
+                    String value = (String) top.getConstant();//Safe see if condition
+                    if ("Host".equals(value)) {
 
-                    bugReporter.reportBug(new BugInstance(this, HEADER_REFERER_TYPE, Priorities.LOW_PRIORITY) //
-                            .addClass(this).addMethod(this).addSourceLine(this));
-                } else if ("User-Agent".equalsIgnoreCase(value)) {
+                        bugReporter.reportBug(new BugInstance(this, SERVER_NAME_TYPE, Priorities.LOW_PRIORITY) //
+                                .addClass(this).addMethod(this).addSourceLine(this));
+                    } else if ("Referer".equalsIgnoreCase(value)) {
 
-                    bugReporter.reportBug(new BugInstance(this, HEADER_USER_AGENT_TYPE, Priorities.LOW_PRIORITY) //
-                            .addClass(this).addMethod(this).addSourceLine(this));
-                } else {
 
-                    bugReporter.reportBug(new BugInstance(this, HEADER_TYPE, Priorities.LOW_PRIORITY) //
-                            .addClass(this).addMethod(this).addSourceLine(this));
-                }
+                        bugReporter.reportBug(new BugInstance(this, HEADER_REFERER_TYPE, Priorities.LOW_PRIORITY) //
+                                .addClass(this).addMethod(this).addSourceLine(this));
+                    } else if ("User-Agent".equalsIgnoreCase(value)) {
+
+
+                        bugReporter.reportBug(new BugInstance(this, HEADER_USER_AGENT_TYPE, Priorities.LOW_PRIORITY) //
+                                .addClass(this).addMethod(this).addSourceLine(this));
+                    } else {
+
+
+                        bugReporter.reportBug(new BugInstance(this, HEADER_TYPE, Priorities.LOW_PRIORITY) //
+                                .addClass(this).addMethod(this).addSourceLine(this));
+                    }
+
             }
         }
     }

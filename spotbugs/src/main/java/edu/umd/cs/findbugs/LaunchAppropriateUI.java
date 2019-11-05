@@ -129,6 +129,10 @@ public class LaunchAppropriateUI {
             }
             copyArgs[i]=args[args.length-1];
             args=copyArgs.clone();}
+            if(AnalyseCommand.isSelectBugTypes){
+            WriteIncludeXml writeIncludeXml=new WriteIncludeXml();
+            writeIncludeXml.setDir();
+            writeIncludeXml.createXML();}
             FindBugs2.main(args);
         } else if (launchProperty == SHOW_HELP) {
             ShowHelp.main(args);
@@ -230,7 +234,7 @@ public class LaunchAppropriateUI {
         Date end=new Date();
         SimpleDateFormat dateFormatEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         endTime=dateFormatEnd.format(end);
-        if(launcher.index!=0){
+        if(AnalyseCommand.isBugreporterLocation){
         SaveBugReporter saveBugReporter=new SaveBugReporter();}
     }
 }

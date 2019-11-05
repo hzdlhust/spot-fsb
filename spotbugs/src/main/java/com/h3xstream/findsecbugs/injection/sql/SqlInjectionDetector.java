@@ -19,6 +19,7 @@ package com.h3xstream.findsecbugs.injection.sql;
 
 import com.h3xstream.findsecbugs.injection.BasicInjectionDetector;
 import com.h3xstream.findsecbugs.taintanalysis.Taint;
+import edu.umd.cs.findbugs.AllBugTypes;
 import edu.umd.cs.findbugs.BugReporter;
 import edu.umd.cs.findbugs.Priorities;
 
@@ -27,9 +28,9 @@ public class SqlInjectionDetector extends BasicInjectionDetector {
     public SqlInjectionDetector(BugReporter bugReporter) {
         super(bugReporter);
         loadConfiguredSinks("sql-jdbc.txt", "SQL_INJECTION_JDBC");
-        loadConfiguredSinks("sql-spring.txt", "SQL_INJECTION_SPRING_JDBC");
+        loadConfiguredSinks("sql-spring.txt", "SQL_INJECTION_SPRING_JDBC");}
         //TODO : Add org.springframework.jdbc.core.simple.SimpleJdbcTemplate (Spring < 3.2.1)
-    }
+
     
     @Override
     protected int getPriority(Taint taint) {
