@@ -849,8 +849,9 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
                     } else if ("get".equals(mn)) {
                         if (taint.collectionIsVaild == true && stackDep > 1) {
                             String idx = tt.getTopValue().getConstantValue();
-                            if (idx != null ) {
-                                taint.setState(tt.getValue(varIdx).innerList.get(Integer.parseInt(idx)));
+                            int iidx = Integer.parseInt(idx);
+                            if (idx != null && iidx < tt.getValue(varIdx).innerList.size()) {
+                                taint.setState(tt.getValue(varIdx).innerList.get(iidx));
                             }
                         }
                     }else if("remove".equals(mn)){

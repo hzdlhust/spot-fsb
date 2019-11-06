@@ -154,10 +154,12 @@ public class MyselfConfig {
                                 taintConfig.put(sign,taintMethodConfig);
                             else{
                                 param.addAll(taintConfig.get(sign).getOutputTaint().getParameters());
+                                if(param.size() == 0) continue;
                                 String replace = "";
                                 for(Integer idx : param){
                                     replace = idx+",";
                                 }
+                                if(replace.length() == 0) continue;
                                 replace = replace.substring(0,replace.length()-1);
                                 TaintMethodConfig intermc = new TaintMethodConfig(false).load(replace);
                                 intermc.setTypeSignature(sign);
