@@ -1,13 +1,11 @@
 package edu.umd.cs.findbugs;
 
+import com.itextpdf.text.Annotation;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Image;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 
 public class BaseInformation {
@@ -32,9 +30,12 @@ public class BaseInformation {
         else if(bugInstance.getPriority()==3) priorityLow++;
     }
 
-    public void BugInfo(BugInstance bugInstance){
-        BugPattern bugPattern=bugInstance.getBugPattern();
+    public void BugInfo(BugInstance bugInstance,int id){
+     //   BugPattern bugPattern=bugInstance.getBugPattern();
+
         String bugTypes=bugInstance.getType();
+        ClassAnnotation classAnnotation=bugInstance.getPrimaryClass();
+        String className=classAnnotation.getSimpleClassName();
 
         if(allBugTypes.getBugType_Name().size()==0){
         allBugTypes.setBugType_Name();}
@@ -43,8 +44,21 @@ public class BaseInformation {
             description="nothing";
         }
         int priority=bugInstance.getPriority();
+        String s=null;
+        if(priority==1) s="高危漏洞";
+        else if(priority==2) s="中危漏洞";
+        else s="低危漏洞";
         PriorityBug priorityBug=new PriorityBug(description);
         boolean flag=true;
+
+        File directory = new File("");
+        String  categoryName= null;
+        try {
+            categoryName = directory.getCanonicalPath()+"\\images";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if(!description.equals("nothing")) {
             for (PriorityBug priorityBug1 : priorityBugs) {
                 //如果存进去了
@@ -56,13 +70,18 @@ public class BaseInformation {
                     p.put(priority, num);
                     priorityBugs.remove(priorityBug1);
                     priorityBug1.setPrioritys(p);
-
                     BugLineAndImage bugLineAndImage=new BugLineAndImage();
-                    bugLineAndImage.setBugLine(bugInstance.getPrimaryClass().getClassName()+","+bugInstance.getPrimarySourceLineAnnotation().getStartLine());
-                    String picturePath=AnalyseCommand.bugreporterLocation+"\\images\\"+bugTypes+".jpg";
+                    bugLineAndImage.setBugLine(bugInstance.getPrimaryClass().getClassName()+","+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+"行,"+s);
+                    //if(id<500){
+                    String picturePath=categoryName+"\\"+className+"_"+bugTypes+"_"+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+".png";
                     try {
+                   //     if(id<1000){
                         Image image = Image.getInstance(picturePath);
                         bugLineAndImage.setImages(image);
+                  //      }
+                //        else{
+                  //          bugLineAndImage.setSimpleInfo(setSimpleInfo(bugInstance));
+               //         }
                         bugLineAndImages.add(bugLineAndImage);
                         priorityBug1.setBugLineAndImage(bugLineAndImages);
 
@@ -86,12 +105,19 @@ public class BaseInformation {
                 priorityBug.setDetailText(detail);
 
                 /**/
+
+
                 BugLineAndImage bugLineAndImage=new BugLineAndImage();
-                bugLineAndImage.setBugLine(bugInstance.getPrimaryClass().getClassName()+".java: "+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+"行");
-                String picturePath=AnalyseCommand.bugreporterLocation+"\\images\\"+bugTypes+".jpg";
+                bugLineAndImage.setBugLine(bugInstance.getPrimaryClass().getClassName()+".java: "+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+"行,"+s);
+                String picturePath=categoryName+"\\"+className+"_"+bugTypes+"_"+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+".png";
                 Image image = null;
                 try {
+                 //   if(id<1000){
                     image = Image.getInstance(picturePath);
+                //}
+//             //       else {
+//                        bugLineAndImage.setSimpleInfo(setSimpleInfo(bugInstance));
+//                    }
                 } catch (BadElementException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -106,109 +132,37 @@ public class BaseInformation {
             }
 
         }
-    }
-     /*分类统计*/
-   /*  public void BugInfo(BugInstance bugInstance){
-          BugPattern bugPattern=bugInstance.getBugPattern();
-          BugCode bugCode=bugPattern.getBugCode();
-          String description=bugCode.getDescription();
-          int priority=bugInstance.getPriority();
-          PriorityBug priorityBug=new PriorityBug(description);
-          boolean flag=true;
-          for(PriorityBug priorityBug1:priorityBugs){
-              if(priorityBug1.getDescription().equals(description)&&priority<=3){
-                  HashMap<Integer,Integer> p=priorityBug1.getPrioritys();
-                  int num=p.get(priority);
-                  num++;
-                  p.put(priority,num);
-                  priorityBugs.remove(priorityBug1);
-                  priorityBug1.setPrioritys(p);
-                  priorityBugs.add(priorityBug1);
-                  flag=false;
-                  break;
-              }
-          }
-          if(flag&&priority<=3){
-              HashMap<Integer,Integer> p=priorityBug.getPrioritys();
-              p.put(priority,1);
-              priorityBug.setPrioritys(p);
-              priorityBugs.add(priorityBug);
-          }
-     }*/
-     /*存储文件*/
-  /*   public void saveBugInfo(){
-         BufferedWriter out = null;
-         try {
-             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dir+"\\baseInformation.txt", true)));
-             for(PriorityBug priorityBug:priorityBugs){
-                 String content="漏洞名称:"+priorityBug.getDescription()+
-                         ",高:"+priorityBug.getPrioritys().get(1)+
-                         ",中:"+priorityBug.getPrioritys().get(2)+
-                         ",低:"+priorityBug.getPrioritys().get(3)+"\n";
-                         out.write(content);
-             }
-             out.write("\n");
-         } catch (Exception e) {
-             e.printStackTrace();
-         } finally {
-             try {
-                 if(out != null){
-                     out.close();
-                 }
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-         }
-     }*/
-     /*存储漏洞信息*/
-  /*   public void saveDetailText(BugInstance bugInstance,int id){
-         String s=Integer.toString(id);
-         String fileName="";
-         if(s.length()<5) {
-             for(int i=0;i<5-s.length();i++){
-                 fileName+="0";
-             }
-             fileName+=s;
-         }
-         else if(s.length()>5){
-             System.out.print("too many bugs");
-         }
-         else fileName=s;
 
-         String filePath=System.getProperty("user.dir");
-         String dir=filePath+"\\repoters";
-         File oFile=new File(dir);
-         if(!oFile.exists()){
-             oFile.mkdir();
-         }
-         dir=dir+"\\detailedInformation";
-         File file=new File(dir);
-         if(!file.exists()){
-            file.mkdir();
-         }
-         dir=dir+"\\"+fileName+".txt";
-         File f=new File(dir);
-         if(!f.exists()){
-             try {
-                 f.createNewFile();
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-         }
-         BugPattern bugPattern=bugInstance.getBugPattern();
-         BugCode bugCode=bugPattern.getBugCode();
-         String detailPlainText="Bug description:"+bugCode.getDescription()+"\n\n"+bugPattern.getDetailPlainText()+"\n\n"+"Bug kind and pattern:"
-                 +bugPattern.getCategory()+"-"+bugPattern.getType();
-         BufferedOutputStream out= null;
-         try {
-             out = new BufferedOutputStream(new FileOutputStream(dir));
-             out.write(detailPlainText.getBytes());
-             out.flush();
-             out.close();
-         } catch (FileNotFoundException e) {
-             e.printStackTrace();
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-}*/
+        String deleteFileName=categoryName+"\\"+className+"_"+bugTypes+"_"+bugInstance.getPrimarySourceLineAnnotation().getStartLine();
+        File file=new File(deleteFileName+".png");
+        if(file.isFile()){
+            file.delete();
+        }
+        file=new File(deleteFileName+".dot");
+        if(file.isFile()){
+            file.delete();
+        }
+
+    }
+
+    public String setSimpleInfo(BugInstance bugInstance){
+        ClassAnnotation classAnnotation=bugInstance.getPrimaryClass();
+        MethodAnnotation methodAnnotation=bugInstance.getPrimaryMethod();
+        //StringBuilder method=new StringBuilder();
+        List<? extends BugAnnotation> annotationList=bugInstance.getAnnotations();
+        StringBuilder str=new StringBuilder("In method "+ methodAnnotation.getFullMethod(classAnnotation)+"\n");
+        for(BugAnnotation annotation:annotationList){
+            if(annotation instanceof SourceLineAnnotation){
+                SourceLineAnnotation sourceLineAnnotation=(SourceLineAnnotation) annotation;
+                str.append(new StringBuilder(sourceLineAnnotation.toString())+"\n");
+            }
+            if(annotation instanceof StringAnnotation){
+                StringAnnotation stringAnnotation=(StringAnnotation) annotation;
+                str.append(new StringBuilder(stringAnnotation.toString())+"\n");
+            }
+        }
+        return str+"";
+
+    }
+
 }

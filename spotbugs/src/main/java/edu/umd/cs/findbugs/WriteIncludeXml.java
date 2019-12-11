@@ -52,7 +52,7 @@ public class WriteIncludeXml {
         list.add("XSS_SERVLET");
         list.add("SCALA_XSS_TWIRL");
         list.add("SCALA_XSS_MVC_API");
-        list.add("SERVLET_PARAMETER");
+     //   list.add("SERVLET_PARAMETER");
 
         list.add("UNVALIDATED_REDIRECT");
         list.add("PLAY_UNVALIDATED_REDIRECT");
@@ -60,8 +60,8 @@ public class WriteIncludeXml {
 
         list.add("JSP_XSLT");
         list.add("MALICIOUS_XSLT");
-        list.add("SERVLET_PARAMETER");
-        list.add("SERVLET_QUERY_STRING");
+      //  list.add("SERVLET_PARAMETER");
+        //list.add("SERVLET_QUERY_STRING");
         list.add("PATH_TRAVERSAL_IN");
         list.add("PATH_TRAVERSAL_OUT");
         list.add("SCALA_PATH_TRAVERSAL_IN");
@@ -127,7 +127,7 @@ public class WriteIncludeXml {
         list.add("JAXRS_ENDPOINT");
         list.add("TAPESTRY_ENDPOINT");
         list.add("WICKET_ENDPOINT");
-        list.add("XML_DECODER");
+    //    list.add("XML_DECODER");
 
         list.add("HTTP_PARAMETER_POLLUTION");
         list.add("FORMAT_STRING_MANIPULATION");
@@ -163,8 +163,8 @@ public class WriteIncludeXml {
 
         list.add("SCALA_SENSITIVE_DATA_EXPOSURE");
         list.add("INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE");
-        list.add("UNENCRYPTED_SOCKET");
-        list.add("UNENCRYPTED_SERVER_SOCKET");
+      //  list.add("UNENCRYPTED_SOCKET");
+        //list.add("UNENCRYPTED_SERVER_SOCKET");
         list.add("UNSAFE_HASH_EQUALS");
 
         list.add("PREDICTABLE_RANDOM");
@@ -178,12 +178,14 @@ public class WriteIncludeXml {
 
         list.add("WEAK_FILENAMEUTILS");
 
-        list.add("HTTP_RESPONSE_SPLITTING");
+      //  list.add("HTTP_RESPONSE_SPLITTING");
         list.add("CRLF_INJECTION_LOGS");
 
         list.add("EXTERNAL_CONFIG_CONTROL");
         list.add("BAD_HEXA_CONVERSION");
         list.add("AWS_QUERY_INJECTION");
+        list.add("DMI_CONSTANT_DB_PASSWORD");
+        list.add("DMI_EMPTY_DB_PASSWORD");
 
     }
 
@@ -191,7 +193,7 @@ public class WriteIncludeXml {
         File directory = new File("");//参数为空
         try {
             String courseFile = directory.getCanonicalPath() ;
-            System.out.print(courseFile);
+         //   System.out.print(courseFile);
             this.dir=courseFile;
         } catch (IOException e) {
             e.printStackTrace();
@@ -217,16 +219,16 @@ public class WriteIncludeXml {
             String str=AnalyseCommand.bugTypes;
             setList();
             int i=0;
-            int[] bugNum=new int[]{12,2,5,7,3,
-                                   8,3,1,1,1,
+            int[] bugNum=new int[]{12,2,5,6,3,
+                                   6,3,1,1,1,
                                     2,7,1,1,1,
                                     1,3,3,1,1,
                                     1,5,4,1,1,
-                                    2,8,1,1,1,
-                                    3,4,2,15,5,
-                                    2,5,1,0,2,
-                                    1,1,1};
-            for(int index=0;index<43;index++) {
+                                    2,7,1,1,1,
+                                    3,4,2,15,3,
+                                    2,5,1,0,1,
+                                    1,1,1,2};
+            for(int index=0;index<44;index++) {
                 if (str.charAt(index) == '1') {
                     int j=0;
                     while (j < bugNum[index]) {
@@ -236,6 +238,8 @@ public class WriteIncludeXml {
                         j++;
                     }
                 }
+                else {
+                i+=bugNum[index];}
             }
             OutputFormat outputFormat=OutputFormat.createPrettyPrint();
             outputFormat.setEncoding("UTF-8");

@@ -108,20 +108,18 @@ public class LaunchAppropriateUI {
             System.exit(1);
         }
 
-        int launchProperty = getLaunchProperty();
-
+       int launchProperty = getLaunchProperty();
         if (GraphicsEnvironment.isHeadless() || launchProperty == TEXTUI) {
             //处理字符串
-            AnalyseCommand analyseCommand=new AnalyseCommand(args);
 
-            if(analyseCommand.isBugreporterLocation&&AnalyseCommand.isSelectBugTypes){
+            if(AnalyseCommand.isBugreporterLocation&&AnalyseCommand.isSelectBugTypes){
                 index=4;
             }
             else if(!AnalyseCommand.isBugreporterLocation&&!AnalyseCommand.isSelectBugTypes){
                 index=0;
             }
             else index=2;
-            if(index!=0){
+           if(index!=0){
             String[] copyArgs=new String[args.length-index];
             int i=0;
             for(i=0;i<args.length-index-1;i++){
@@ -229,8 +227,41 @@ public class LaunchAppropriateUI {
         Date start = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         startTime= dateFormat.format( start );
-        LaunchAppropriateUI launcher = new LaunchAppropriateUI(args);
-        launcher.launch();
+        AnalyseCommand analyseCommand=new AnalyseCommand(args);
+        if(AnalyseCommand.isSelectBugTypes){
+            String[] arg=new String[9+args.length];
+            arg[0]="-textui";
+            arg[1]="-nested:false";
+            arg[2]="-low";
+            arg[3]="-output";
+            arg[4]="result.xml";
+            arg[5]="-include";
+            arg[6]="include.xml";
+            arg[7]="-bugCategories";
+            arg[8]="SECURITY";
+            //int j=9;
+            for(int i=0;i<args.length;i++){
+                arg[9+i]=args[i];
+            }
+            LaunchAppropriateUI launcher = new LaunchAppropriateUI(arg);
+            launcher.launch();
+        }
+        else {
+            String[] arg=new String[7+args.length];
+            arg[0]="-textui";
+            arg[1]="-nested:false";
+            arg[2]="-low";
+            arg[3]="-output";
+            arg[4]="result.xml";
+            arg[5]="-bugCategories";
+            arg[6]="SECURITY";
+            for(int i=0;i<args.length;i++){
+                arg[7+i]=args[i];
+            }
+            LaunchAppropriateUI launcher = new LaunchAppropriateUI(arg);
+            launcher.launch();
+        }
+
         Date end=new Date();
         SimpleDateFormat dateFormatEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         endTime=dateFormatEnd.format(end);

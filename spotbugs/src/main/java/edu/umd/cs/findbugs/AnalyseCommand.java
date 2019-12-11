@@ -27,9 +27,9 @@ public class AnalyseCommand {
         if(!isSelectBugTypes){
             bugTypes="all";
         }
-        AllBugTypes allBugTypes=new AllBugTypes();
+      //  AllBugTypes allBugTypes=new AllBugTypes();
          //   allBugTypes.setBugName();
-        allBugTypes.setIsBugType();
+    //    allBugTypes.setIsBugType();
 
         if(!isBugreporterLocation){
             bugreporterLocation=null;

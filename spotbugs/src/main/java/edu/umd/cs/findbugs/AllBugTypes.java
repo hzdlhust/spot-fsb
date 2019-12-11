@@ -6,213 +6,12 @@ import java.util.HashMap;
 public class AllBugTypes {
 
     public  HashMap<String,String> bugType_Name=new HashMap<>();
-    public static HashMap<String,Integer> bugName=new HashMap<>();
-    public static boolean[] isBugType=new boolean[132];
-    private static int bugTypesNum=132;
 
 
 
     public AllBugTypes(){
 
     }
-    private void setIsBugTypeTrue(int begin,int end){
-        for(int i=begin;i<=end;i++){
-            isBugType[i]=true;
-        }
-    }
-    public void setIsBugType(){
-        for(int i=0;i<bugTypesNum;i++){
-            isBugType[i]=false;
-        }
-        String str=AnalyseCommand.bugTypes;
-        if(str.equals("all")){
-            setIsBugTypeTrue(0,bugTypesNum-1);
-            return;
-        }
-        if(str.charAt(0)=='1'){
-           setIsBugTypeTrue(0,11);
-        }
-        if(str.charAt(1)=='1'){
-            setIsBugTypeTrue(12,13);
-        }
-        if(str.charAt(2)=='1'){
-            setIsBugTypeTrue(14,18);
-        }
-        if(str.charAt(3)=='1'){
-            setIsBugTypeTrue(19,25);
-        }
-        if(str.charAt(4)=='1'){
-            setIsBugTypeTrue(26,28);
-        }
-        if(str.charAt(5)=='1'){
-            setIsBugTypeTrue(29,36);
-        }
-        if(str.charAt(6)=='1'){
-            setIsBugTypeTrue(37,39);
-        }
-        if(str.charAt(7)=='1'){
-            setIsBugTypeTrue(40,40);
-        }
-        if(str.charAt(8)=='1'){
-            setIsBugTypeTrue(41,41);
-        }
-        if(str.charAt(9)=='1'){
-            setIsBugTypeTrue(42,42);
-        }
-        if(str.charAt(10)=='1'){
-            setIsBugTypeTrue(43,44);
-        }
-        if(str.charAt(11)=='1'){
-            setIsBugTypeTrue(45,51);
-        }
-        if(str.charAt(12)=='1'){
-            setIsBugTypeTrue(52,52);
-        }
-        if(str.charAt(13)=='1'){
-            setIsBugTypeTrue(53,53);
-        }
-        if(str.charAt(14)=='1'){
-            setIsBugTypeTrue(54,54);
-        }
-        if(str.charAt(15)=='1'){
-            setIsBugTypeTrue(55,55);
-        }
-        if(str.charAt(16)=='1'){
-            setIsBugTypeTrue(56,58);
-        }
-        if(str.charAt(17)=='1'){
-            setIsBugTypeTrue(59,61);
-        }
-        if(str.charAt(18)=='1'){
-            setIsBugTypeTrue(62,62);
-        }
-        if(str.charAt(19)=='1'){
-            setIsBugTypeTrue(63,63);
-        }
-        if(str.charAt(20)=='1'){
-            setIsBugTypeTrue(64,64);
-        }
-        if(str.charAt(21)=='1'){
-            setIsBugTypeTrue(65,69);
-        }
-        if(str.charAt(22)=='1'){
-            setIsBugTypeTrue(70,73);
-        }
-        if(str.charAt(23)=='1'){
-            setIsBugTypeTrue(74,74);
-        }
-        if(str.charAt(24)=='1'){
-            setIsBugTypeTrue(75,75);
-        }
-        if(str.charAt(25)=='1'){
-            setIsBugTypeTrue(76,77);
-        }
-        if (str.charAt(26)=='1'){
-            setIsBugTypeTrue(78,85);
-        }
-        if(str.charAt(27)=='1'){
-            setIsBugTypeTrue(86,86);
-        }
-        if(str.charAt(28)=='1'){
-            setIsBugTypeTrue(87,87);
-        }
-        if(str.charAt(29)=='1'){
-            setIsBugTypeTrue(88,88);
-        }
-        if(str.charAt(30)=='1'){
-            setIsBugTypeTrue(89,91);
-        }
-        if(str.charAt(31)=='1'){
-            setIsBugTypeTrue(92,95);
-        }
-        if(str.charAt(32)=='1'){
-            setIsBugTypeTrue(96,97);
-        }
-        if(str.charAt(33)=='1'){
-            setIsBugTypeTrue(98,112);
-        }
-        if(str.charAt(34)=='1'){
-            setIsBugTypeTrue(113,117);
-        }
-        if(str.charAt(35)=='1'){
-            setIsBugTypeTrue(118,119);
-        }
-        if(str.charAt(36)=='1'){
-            setIsBugTypeTrue(120,124);
-        }
-        if(str.charAt(37)=='1'){
-            setIsBugTypeTrue(125,125);
-        }
-        if(str.charAt(38)=='1'){
-            setIsBugTypeTrue(126,126);
-        }
-        if(str.charAt(39)=='1'){
-            setIsBugTypeTrue(127,128);
-        }
-        if(str.charAt(40)=='1'){
-            setIsBugTypeTrue(129,129);
-        }
-        if(str.charAt(41)=='1'){
-            setIsBugTypeTrue(130,130);
-        }
-        if(str.charAt(42)=='1'){
-            setIsBugTypeTrue(131,131);
-        }
-    }
-    public void setBugName(){
-        bugName.put("SQL注入",1);
-        bugName.put("命令注入",2);
-        bugName.put("代码注入",3);
-        bugName.put("跨站脚本攻击（XSS）",4);
-        bugName.put("未验证的重定向和转发",5);
-        bugName.put("路径操作",6);
-        bugName.put("跨站请求伪造",7);
-        bugName.put("HTTP响应截断",8);
-        bugName.put("上传任意文件",9);
-        bugName.put("资源注入",10);
-
-        bugName.put("LDAP注入",11);
-        bugName.put("XML注入",12);
-        bugName.put("危险文件包含",13);
-        bugName.put("JSON注入（劫持）",14);
-        bugName.put("OGNL注入",15);
-        bugName.put("Xpath注入",16);
-        bugName.put("文件泄露",17);
-        bugName.put("不安全的加密存储",18);
-        bugName.put("访问控制",19);
-        bugName.put("密码管理",20);
-
-        bugName.put("私有信息侵犯",21);
-        bugName.put("Cookie安全",22);
-        bugName.put("不安全的传输",23);
-        bugName.put("会话固定",24);
-        bugName.put("竞争条件",25);
-        bugName.put("模板注入",26);
-        bugName.put("输入验证",27);
-        bugName.put("HTTP参数污染",28);
-        bugName.put("格式化字符串",29);
-        bugName.put("SMTP注入",30);
-
-        bugName.put("认证问题",31);
-        bugName.put("反序列化",32);
-        bugName.put("服务器端请求伪造",33);
-        bugName.put("加密问题",34);
-        bugName.put("信息泄露",35);
-        bugName.put("随机数",36);
-        bugName.put("安全决策",37);
-        bugName.put("空字节检验",38);
-        bugName.put("资源消耗",39);
-        bugName.put("CRLF注入",40);
-
-        bugName.put("系统或配置设置的外部控制",41);
-        bugName.put("类型转化错误",42);
-        bugName.put("AWS注入",43);
-
-    }
-
-  /*  public HashMap<String,Integer> getBugName(){
-        return bugName;
-    }*/
 
     public HashMap<String,String> getBugType_Name(){
         return bugType_Name;
@@ -247,7 +46,7 @@ public class AllBugTypes {
         bugType_Name.put("XSS_SERVLET","XSS");
         bugType_Name.put("SCALA_XSS_TWIRL","XSS");
         bugType_Name.put("SCALA_XSS_MVC_API","XSS");
-        bugType_Name.put("SERVLET_PARAMETER","XSS");
+     //   bugType_Name.put("SERVLET_PARAMETER","XSS");
 
         bugType_Name.put("UNVALIDATED_REDIRECT","未验证的重定向和转发");
         bugType_Name.put("PLAY_UNVALIDATED_REDIRECT","未验证的重定向和转发");
@@ -255,8 +54,8 @@ public class AllBugTypes {
 
         bugType_Name.put("JSP_XSLT","路径操作");
         bugType_Name.put("MALICIOUS_XSLT","路径操作");
-        bugType_Name.put("SERVLET_PARAMETER","路径操作");
-        bugType_Name.put("SERVLET_QUERY_STRING","路径操作");
+       // bugType_Name.put("SERVLET_PARAMETER","路径操作");
+       // bugType_Name.put("SERVLET_QUERY_STRING","路径操作");
         bugType_Name.put("PATH_TRAVERSAL_IN","路径操作");
         bugType_Name.put("PATH_TRAVERSAL_OUT","路径操作");
         bugType_Name.put("SCALA_PATH_TRAVERSAL_IN","路径操作");
@@ -318,7 +117,7 @@ public class AllBugTypes {
         bugType_Name.put("JAXRS_ENDPOINT","输入验证");
         bugType_Name.put("TAPESTRY_ENDPOINT","输入验证");
         bugType_Name.put("WICKET_ENDPOINT","输入验证");
-        bugType_Name.put("XML_DECODER","输入验证");
+      //  bugType_Name.put("XML_DECODER","输入验证");
         bugType_Name.put("HTTP_PARAMETER_POLLUTION","HTTP参数污染");
         bugType_Name.put("FORMAT_STRING_MANIPULATION","格式化字符串");
         bugType_Name.put("SMTP_HEADER_INJECTION","SMTP注入");
@@ -352,8 +151,8 @@ public class AllBugTypes {
 
         bugType_Name.put("SCALA_SENSITIVE_DATA_EXPOSURE","信息泄露");
         bugType_Name.put("INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE","信息泄露");
-        bugType_Name.put("UNENCRYPTED_SOCKET","信息泄露");
-        bugType_Name.put("UNENCRYPTED_SERVER_SOCKET","信息泄露");
+    //    bugType_Name.put("UNENCRYPTED_SOCKET","信息泄露");
+      //  bugType_Name.put("UNENCRYPTED_SERVER_SOCKET","信息泄露");
         bugType_Name.put("UNSAFE_HASH_EQUALS","信息泄露");
 
         bugType_Name.put("PREDICTABLE_RANDOM","随机数问题");
@@ -366,11 +165,14 @@ public class AllBugTypes {
         bugType_Name.put("SERVLET_HEADER_USER_AGENT","安全策略");
 
         bugType_Name.put("WEAK_FILENAMEUTILS","空字节检验");
-        bugType_Name.put("HTTP_RESPONSE_SPLITTING","CRLF注入");
+     //   bugType_Name.put("HTTP_RESPONSE_SPLITTING","CRLF注入");
         bugType_Name.put("CRLF_INJECTION_LOGS","CRLF注入");
 
         bugType_Name.put(" EXTERNAL_CONFIG_CONTROL","系统或配置设置的外部控制");
         bugType_Name.put("BAD_HEXA_CONVERSION","类型转化错误");
         bugType_Name.put("AWS_QUERY_INJECTION","AWS注入");
+        bugType_Name.put("DMI_CONSTANT_DB_PASSWORD","数据库密码安全");
+        bugType_Name.put("DMI_EMPTY_DB_PASSWORD","数据库密码安全");
+
     }
 }

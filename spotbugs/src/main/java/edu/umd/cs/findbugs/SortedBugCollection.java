@@ -546,16 +546,23 @@ public class SortedBugCollection implements BugCollection {
                     id++;
                     bugInstance.writeXML(xmlOutput, this, withMessages,id);
                     //为真的时候才选择了需要报告信息
-                    if(AnalyseCommand.isBugreporterLocation) {
-                        CreateFlow createFlow = new CreateFlow();
-                        createFlow.setWindows(bugInstance, id);
+                       /* CreateFlow createFlow = new CreateFlow();
+                        createFlow.setWindows(bugInstance, id);*/
+                       if(AnalyseCommand.isBugreporterLocation) {
+                           /*创建.dot文件,当有bug位置的时候创建dot文件  再运行dot命令  接着有报告位置的时候直接提取图片*/
+                       //    if (id < 1000) {
+                               CreateDotFile createDotFile = new CreateDotFile();
+                               createDotFile.saveFile(bugInstance);
+                 //          }
+                               //  createDotFile.changeDotToImage(bugInstance);
 
-                        BaseInformation baseInformation = new BaseInformation();
-                        baseInformation.PriorityInfo(bugInstance);
-                        baseInformation.BugInfo(bugInstance);
+                               BaseInformation baseInformation = new BaseInformation();
+                               baseInformation.PriorityInfo(bugInstance);
+                               baseInformation.BugInfo(bugInstance,id);
+
+                       }
                     }
                 }
-            }
 
             writeEpilogue(xmlOutput);
 

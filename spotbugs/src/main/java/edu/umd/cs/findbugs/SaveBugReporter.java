@@ -3,12 +3,16 @@ package edu.umd.cs.findbugs;
 
 
 
+import java.io.File;
 import java.io.FileOutputStream;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import net.sf.saxon.trans.SymbolicName;
 
+
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -18,8 +22,12 @@ import java.util.Set;
 public class SaveBugReporter {
     public SaveBugReporter(){
         try {
-            Document document = new Document(PageSize.A4, 50, 50, 50, 50);
             String PdfName=AnalyseCommand.bugreporterLocation+"\\"+"bugReporter.pdf";
+            File file=new File(PdfName);
+            if (file.exists()) {
+                file.delete();
+            }
+            Document document = new Document(PageSize.A4, 50, 50, 50, 50);
             PdfWriter.getInstance(document, new FileOutputStream(PdfName));
             document.open();
             BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
@@ -106,9 +114,33 @@ public class SaveBugReporter {
             saveBugs(document,FontNomal);
             saveDetailInfo(document,FontNomal);
           document.close();
+
+            File directory = new File("");
+            String  categoryName= null;
+            try {
+                categoryName = directory.getCanonicalPath()+"\\images";
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            File fileDir=new File(categoryName);
+            deleteDir(fileDir);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean deleteDir(File file){
+
+        if(!file.exists()){
+            return false;
+        }
+        if(file.isDirectory()){
+            File[] files=file.listFiles();
+            for(File f:files){
+                deleteDir(f);
+            }
+        }
+        return file.delete();
     }
 
     public void savePriority(Document document,Font Font){
@@ -155,7 +187,10 @@ public class SaveBugReporter {
             cell23[1]=new PdfPCell(new Paragraph(BaseInformation.priorityHigh+""));
             cell23[1].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
             if(total!=0){
-            cell23[2]=new PdfPCell(new Paragraph(Math.round(BaseInformation.priorityHigh*1.0/total)+""));}
+                double f=(BaseInformation.priorityHigh*1.0/total)*100;
+                DecimalFormat df=new DecimalFormat("#0.00");
+                String r=df.format(f);
+            cell23[2]=new PdfPCell(new Paragraph(r+"%"));}
             else {
                 cell23[2]=new PdfPCell(new Paragraph("None"));
             }
@@ -170,7 +205,10 @@ public class SaveBugReporter {
             cell24[1]=new PdfPCell(new Paragraph(BaseInformation.priorityNormal+""));
             cell24[1].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
             if(total!=0){
-            cell24[2]=new PdfPCell(new Paragraph(Math.round(BaseInformation.priorityNormal*1.0/total)+""));}
+                double f=(BaseInformation.priorityNormal*1.0/total)*100;
+                DecimalFormat df=new DecimalFormat("#0.00");
+                String r=df.format(f);
+            cell24[2]=new PdfPCell(new Paragraph(r+"%"));}
             else {
                 cell24[2]=new PdfPCell(new Paragraph("None"));
             }
@@ -184,7 +222,10 @@ public class SaveBugReporter {
             cell25[1]=new PdfPCell(new Paragraph(BaseInformation.priorityLow+""));
             cell25[1].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
             if(total!=0){
-            cell25[2]=new PdfPCell(new Paragraph(Math.round(BaseInformation.priorityLow*1.0/total)+""));}
+                double f=(BaseInformation.priorityLow*1.0/total)*100;
+                DecimalFormat df=new DecimalFormat("#0.00");
+                String r=df.format(f);
+            cell25[2]=new PdfPCell(new Paragraph(r+"%"));}
             else {
                 cell25[2]=new PdfPCell(new Paragraph("None"));
             }
@@ -275,7 +316,8 @@ public class SaveBugReporter {
                 table.setSpacingBefore(10f); // 前间距
                 table.setSpacingAfter(10f); // 后间距
               //  List<PdfPRow> listRow = table.getRows();
-                table.setSplitLate(false);
+                table.setSplitLate(true);
+                table.setSplitRows(true);
                 float[] columnWidths = {1.8f};
                 table.setWidths(columnWidths);
                 int total=priorityBug.getPrioritys().get(1)+priorityBug.getPrioritys().get(2)+priorityBug.getPrioritys().get(3);
@@ -283,8 +325,12 @@ public class SaveBugReporter {
                 table.addCell(cellNum);
                 PdfPCell cellInfo=new PdfPCell(new Paragraph("漏洞详细信息：",font));
                 table.addCell(cellInfo);
-                PdfPCell cellInfos=new PdfPCell(new Phrase(priorityBug.getDetailText(),font));
+                Font f=new Font(Font.FontFamily.TIMES_ROMAN,14,Font.NORMAL);
+                Paragraph paragraph=new Paragraph(priorityBug.getDetailText(),f);
+                paragraph.setLeading(30f);
+                PdfPCell cellInfos=new PdfPCell(paragraph);
                 table.addCell(cellInfos);
+
 
                 int j=1;
                 Set<BugLineAndImage> bugLineAndImages=priorityBug.getBugLineAndImage();
@@ -294,9 +340,18 @@ public class SaveBugReporter {
                     table.addCell(cell);
                     PdfPCell cellLine=new PdfPCell(new Paragraph("漏洞行数："+bugLineAndImage.getBugLine(),font));
                     table.addCell(cellLine);
-                    PdfPCell cellImage=new PdfPCell(new Paragraph("漏洞关系图：",font));
-                    table.addCell(cellImage);
-                    table.addCell(bugLineAndImage.getImages());
+                    Image png=bugLineAndImage.getImages();
+//                   if(png==null) {
+//                        PdfPCell cellSimpleInfo=new PdfPCell(new Paragraph(bugLineAndImage.getSimpleInfo(),font));
+//                        table.addCell(cellSimpleInfo);
+//                    }
+          //          else {
+                        PdfPCell cellImage = new PdfPCell(new Paragraph("漏洞关系图：", font));
+
+                        table.addCell(cellImage);
+                        //       document.add(table1);
+                        table.addCell(png);
+                //    }
                 }
                 document.add(table);
             }
