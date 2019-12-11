@@ -86,6 +86,7 @@ public abstract class TextUIBugReporter extends AbstractBugReporter {
      *            the bug to print
      */
     protected void printBug(BugInstance bugInstance) {
+        /*
         if (showRank) {
             int rank = BugRanker.findRank(bugInstance);
             outputStream.printf("%2d ", rank);
@@ -136,6 +137,7 @@ public abstract class TextUIBugReporter extends AbstractBugReporter {
         }
         SourceLineAnnotation line = bugInstance.getPrimarySourceLineAnnotation();
         outputStream.println(bugInstance.getMessage().replace('\n', ' ') + "  " + line.toString());
+        */
     }
 
     private boolean analysisErrors;
