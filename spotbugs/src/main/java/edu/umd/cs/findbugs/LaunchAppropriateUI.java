@@ -224,6 +224,7 @@ public class LaunchAppropriateUI {
      */
     public static void main(String args[]) throws Exception {
  //       testFile();
+        new Control().check();
         Date start = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         startTime= dateFormat.format( start );
