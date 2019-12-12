@@ -224,7 +224,6 @@ public class LaunchAppropriateUI {
      */
     public static void main(String args[]) throws Exception {
  //       testFile();
-        new Control().check();
         Date start = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         startTime= dateFormat.format( start );
@@ -266,7 +265,7 @@ public class LaunchAppropriateUI {
         Date end=new Date();
         SimpleDateFormat dateFormatEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         endTime=dateFormatEnd.format(end);
-        if(AnalyseCommand.isBugreporterLocation){
+        if(AnalyseCommand.isBugreporterLocation &&!Control.getInstance().isToExit()){
         SaveBugReporter saveBugReporter=new SaveBugReporter();}
     }
 }
