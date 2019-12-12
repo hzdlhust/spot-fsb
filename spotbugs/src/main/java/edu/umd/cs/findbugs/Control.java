@@ -1,23 +1,34 @@
 package edu.umd.cs.findbugs;
 
-
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class Control{
-    private static volatile boolean exit = false;
+    private static Control control = new Control();
+    private boolean pause = false;
+    private boolean exit = false;
+    private Control(){
 
-    public static void exitProgram(){
+    }
+
+    public static Control getInstance(){
+        return control;
+    }
+
+    public boolean isPaused(){
+        return pause;
+    }
+    public void pause(){
+        pause = true;
+    }
+    public void conti(){
+        pause = false;
+        notifyAll();
+    }
+
+    public boolean isToExit(){
+        return exit;
+    }
+
+    public void toExit(){
         exit = true;
+        notifyAll();
     }
-
-    public void check(){
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(exit) System.exit(0);
-            }
-        }, 1000,2000);
-    }
-
 }
