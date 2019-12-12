@@ -1094,6 +1094,8 @@ public class FindBugs2 implements IFindBugsEngine, AutoCloseable {
 
                     try {
                         for (Detector2 detector : detectorList) {
+                            if(Control.getInstance().isPaused()) this.wait();
+                            if(Control.getInstance().isToExit()) return;
                             if (Thread.interrupted()) {
                                 throw new InterruptedException();
                             }
