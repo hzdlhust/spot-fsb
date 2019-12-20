@@ -172,29 +172,43 @@ This plugin contains all of the standard SpotBugs detectors.
     <Details>Identify various kinds of SQL Injection with Android API</Details>
   </Detector>
   <!-- Android:  -->
+  <!--
   <Detector class="com.h3xstream.findsecbugs.android.WebViewJavascriptInterfaceDetector">
     <Details>Identity WebView with a Java bridge (JavaScript Interface).</Details>
   </Detector>
+  -->
   <!-- Android: WebView with JavaScript Enabled -->
+  <!--
   <Detector class="com.h3xstream.findsecbugs.android.WebViewJavascriptEnabledDetector">
     <Details>Identity WebView with JavaScript Enabled.</Details>
   </Detector>
+  -->
   <!-- Android: Geolocation -->
+  <!--
   <Detector class="com.h3xstream.findsecbugs.android.GeolocationDetector">
     <Details>Identity usage of Geolocation API.</Details>
   </Detector>
+  -->
   <!-- Android: World Writable -->
+  <!--
   <Detector class="com.h3xstream.findsecbugs.android.WorldWritableDetector">
     <Details>Identity file written with the creation mode MODE_WORLD_READABLE.</Details>
   </Detector>
+  -->
   <!-- Android: Broadcast -->
+  <!--
   <Detector class="com.h3xstream.findsecbugs.android.BroadcastDetector">
     <Details>Identity sendBroadcast() call and give security implications and helpful guidelines.</Details>
   </Detector>
+  -->
+
+
   <!-- Android: External File Access -->
+  <!--
   <Detector class="com.h3xstream.findsecbugs.android.ExternalFileAccessDetector">
     <Details>Identity file access on external storage.</Details>
   </Detector>
+  -->
   <!-- Tapestry -->
   <Detector class="com.h3xstream.findsecbugs.endpoint.TapestryEndpointDetector">
     <Details>Identify Tapestry "Pages" that accept user input</Details>
@@ -13239,9 +13253,7 @@ create on external storage. See references below for implementation guidelines.
 ]]>
     </Details>
   </BugPattern>
-  <Detector class="com.h3xstream.findsecbugs.android.GeolocationDetector">
-    <Details>Identity usage of Geolocation API.</Details>
-  </Detector>
+
   <BugPattern type="ANDROID_GEOLOCATION">
     <ShortDescription>WebView with geolocation activated (Android)</ShortDescription>
     <LongDescription>WebView with activated geolocation</LongDescription>

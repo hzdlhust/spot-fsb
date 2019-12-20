@@ -48,7 +48,7 @@ import edu.umd.cs.findbugs.config.CommandLine;
 import edu.umd.cs.findbugs.launchGUI.LaunchGUI;
 
 /**
- * Compute the union of two sets of bug results, preserving annotations.
+ * C
  */
 public class MergeSummarizeAndView {
 

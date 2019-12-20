@@ -747,13 +747,17 @@
     <Detector class="com.h3xstream.findsecbugs.endpoint.SpringMvcEndpointDetector" reports="SPRING_ENDPOINT"/>
     <Detector class="com.h3xstream.findsecbugs.endpoint.TapestryEndpointDetector" reports="TAPESTRY_ENDPOINT"/>
     <Detector class="com.h3xstream.findsecbugs.endpoint.WicketEndpointDetector" reports="WICKET_ENDPOINT"/>
+    <!--
     <Detector class="com.h3xstream.findsecbugs.android.ExternalFileAccessDetector" reports="ANDROID_EXTERNAL_FILE_ACCESS"/>
     <Detector class="com.h3xstream.findsecbugs.android.BroadcastDetector" reports="ANDROID_BROADCAST"/>
     <Detector class="com.h3xstream.findsecbugs.android.WorldWritableDetector" reports="ANDROID_WORLD_WRITABLE"/>
     <Detector class="com.h3xstream.findsecbugs.android.GeolocationDetector" reports="ANDROID_GEOLOCATION"/>
     <Detector class="com.h3xstream.findsecbugs.android.WebViewJavascriptEnabledDetector" reports="ANDROID_WEB_VIEW_JAVASCRIPT"/>
     <Detector class="com.h3xstream.findsecbugs.android.WebViewJavascriptInterfaceDetector" reports="ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE"/>
+    -->
+    <!--
     <Detector class="com.h3xstream.findsecbugs.injection.sql.AndroidSqlInjectionDetector" reports="SQL_INJECTION_ANDROID"/>
+    -->
     <!-- Bug Categories -->
            <BugCategory category="NOISE" hidden="true"/>
 

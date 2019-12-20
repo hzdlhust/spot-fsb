@@ -90,7 +90,7 @@ public abstract class TextUIBugReporter extends AbstractBugReporter {
         if (showRank) {
             int rank = BugRanker.findRank(bugInstance);
             outputStream.printf("%2d ", rank);
-        }
+        }*/
         switch (bugInstance.getPriority()) {
         case Priorities.EXP_PRIORITY:
             outputStream.print("E ");
@@ -107,7 +107,7 @@ public abstract class TextUIBugReporter extends AbstractBugReporter {
         default:
             assert false;
         }
-
+    /*
         BugPattern pattern = bugInstance.getBugPattern();
         if (pattern != null) {
             String categoryAbbrev = null;

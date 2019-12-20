@@ -63,7 +63,7 @@ public class LaunchAppropriateUI {
     public static final int SHOW_VERSION = 1001;
 
     /**
-    *Get time.
+     *Get time.
      */
     public static String  startTime;
     public static String  endTime;
@@ -108,7 +108,7 @@ public class LaunchAppropriateUI {
             System.exit(1);
         }
 
-       int launchProperty = getLaunchProperty();
+        int launchProperty = getLaunchProperty();
         if (GraphicsEnvironment.isHeadless() || launchProperty == TEXTUI) {
             //处理字符串
 
@@ -119,18 +119,18 @@ public class LaunchAppropriateUI {
                 index=0;
             }
             else index=2;
-           if(index!=0){
-            String[] copyArgs=new String[args.length-index];
-            int i=0;
-            for(i=0;i<args.length-index-1;i++){
-                copyArgs[i]=args[i];
-            }
-            copyArgs[i]=args[args.length-1];
-            args=copyArgs.clone();}
+            if(index!=0){
+                String[] copyArgs=new String[args.length-index];
+                int i=0;
+                for(i=0;i<args.length-index-1;i++){
+                    copyArgs[i]=args[i];
+                }
+                copyArgs[i]=args[args.length-1];
+                args=copyArgs.clone();}
             if(AnalyseCommand.isSelectBugTypes){
-            WriteIncludeXml writeIncludeXml=new WriteIncludeXml();
-            writeIncludeXml.setDir();
-            writeIncludeXml.createXML();}
+                WriteIncludeXml writeIncludeXml=new WriteIncludeXml();
+                writeIncludeXml.setDir();
+                writeIncludeXml.createXML();}
             FindBugs2.main(args);
         } else if (launchProperty == SHOW_HELP) {
             ShowHelp.main(args);
@@ -223,18 +223,19 @@ public class LaunchAppropriateUI {
      * @throws java.lang.Exception
      */
     public static void main(String args[]) throws Exception {
- //       testFile();
         Date start = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         startTime= dateFormat.format( start );
         AnalyseCommand analyseCommand=new AnalyseCommand(args);
+        String resultPath=null;
+        if(AnalyseCommand.isBugreporterLocation)  resultPath=AnalyseCommand.bugreporterLocation+"\\"+"result.xml";
         if(AnalyseCommand.isSelectBugTypes){
             String[] arg=new String[9+args.length];
             arg[0]="-textui";
             arg[1]="-nested:false";
             arg[2]="-low";
             arg[3]="-output";
-            arg[4]="result.xml";
+            arg[4]=resultPath;
             arg[5]="-include";
             arg[6]="include.xml";
             arg[7]="-bugCategories";
@@ -252,7 +253,7 @@ public class LaunchAppropriateUI {
             arg[1]="-nested:false";
             arg[2]="-low";
             arg[3]="-output";
-            arg[4]="result.xml";
+            arg[4]=resultPath;
             arg[5]="-bugCategories";
             arg[6]="SECURITY";
             for(int i=0;i<args.length;i++){
@@ -266,6 +267,6 @@ public class LaunchAppropriateUI {
         SimpleDateFormat dateFormatEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         endTime=dateFormatEnd.format(end);
         if(AnalyseCommand.isBugreporterLocation &&!Control.getInstance().isToExit()){
-        SaveBugReporter saveBugReporter=new SaveBugReporter();}
+            SaveBugReporter saveBugReporter=new SaveBugReporter();}
     }
 }

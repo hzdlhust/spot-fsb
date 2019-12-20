@@ -6,19 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapHelper {
-    private String name;
-    private Map<String, Taint.State> statemap;
-    public MapHelper(String name){
-        this.name = name;
+    private static Map<String, Taint.State> stateMap = new HashMap<>();
+    public static void putState(String key, Taint.State state){
+        stateMap.put(key,state);
     }
-    public void putstate(String key, Taint.State state){
-        if(statemap == null)    statemap = new HashMap<String,Taint.State>();
-        statemap.put(key,state);
-    }
-    public Taint.State getstate(String key){
-        if(statemap == null) return null;
-        else{
-            return statemap.get(key);
-        }
+    public static Taint.State getState(String key){
+        if(stateMap.containsKey(key)) return stateMap.get(key);
+        else    return Taint.State.SAFE;
     }
 }

@@ -9,7 +9,7 @@ import java.util.*;
 
 
 public class BaseInformation {
-   private  String dir;
+    private  String dir;
     public static int priorityHigh=0;
     public static int priorityNormal=0;
     public static int priorityLow=0;
@@ -31,14 +31,13 @@ public class BaseInformation {
     }
 
     public void BugInfo(BugInstance bugInstance,int id){
-     //   BugPattern bugPattern=bugInstance.getBugPattern();
 
         String bugTypes=bugInstance.getType();
         ClassAnnotation classAnnotation=bugInstance.getPrimaryClass();
         String className=classAnnotation.getSimpleClassName();
 
         if(allBugTypes.getBugType_Name().size()==0){
-        allBugTypes.setBugType_Name();}
+            allBugTypes.setBugType_Name();}
         String description=allBugTypes.bugType_Name.get(bugTypes);
         if(description==null){
             description="nothing";
@@ -54,7 +53,7 @@ public class BaseInformation {
         File directory = new File("");
         String  categoryName= null;
         try {
-            categoryName = directory.getCanonicalPath()+"\\images";
+            categoryName = directory.getCanonicalPath()+"\\"+AnalyseCommand.fileName;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,25 +71,9 @@ public class BaseInformation {
                     priorityBug1.setPrioritys(p);
                     BugLineAndImage bugLineAndImage=new BugLineAndImage();
                     bugLineAndImage.setBugLine(bugInstance.getPrimaryClass().getClassName()+","+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+"行,"+s);
-                    //if(id<500){
-                    String picturePath=categoryName+"\\"+className+"_"+bugTypes+"_"+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+".png";
-                    try {
-                   //     if(id<1000){
-                        Image image = Image.getInstance(picturePath);
-                        bugLineAndImage.setImages(image);
-                  //      }
-                //        else{
-                  //          bugLineAndImage.setSimpleInfo(setSimpleInfo(bugInstance));
-               //         }
-                        bugLineAndImages.add(bugLineAndImage);
-                        priorityBug1.setBugLineAndImage(bugLineAndImages);
-
-                    } catch (BadElementException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
+                    bugLineAndImage.setClassName(className+"_"+bugTypes+"_"+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+".png");
+                    bugLineAndImages.add(bugLineAndImage);
+                    priorityBug1.setBugLineAndImage(bugLineAndImages);
                     priorityBugs.add(priorityBug1);
                     flag = false;
                     break;
@@ -104,26 +87,9 @@ public class BaseInformation {
                 String detail=bugInstance.getBugPattern().getDetailPlainText();
                 priorityBug.setDetailText(detail);
 
-                /**/
-
-
                 BugLineAndImage bugLineAndImage=new BugLineAndImage();
                 bugLineAndImage.setBugLine(bugInstance.getPrimaryClass().getClassName()+".java: "+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+"行,"+s);
-                String picturePath=categoryName+"\\"+className+"_"+bugTypes+"_"+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+".png";
-                Image image = null;
-                try {
-                 //   if(id<1000){
-                    image = Image.getInstance(picturePath);
-                //}
-//             //       else {
-//                        bugLineAndImage.setSimpleInfo(setSimpleInfo(bugInstance));
-//                    }
-                } catch (BadElementException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                bugLineAndImage.setImages(image);
+                bugLineAndImage.setClassName(className+"_"+bugTypes+"_"+bugInstance.getPrimarySourceLineAnnotation().getStartLine()+".png");
                 Set<BugLineAndImage> bugLineAndImages=new HashSet<>();
                 bugLineAndImages.add(bugLineAndImage);
                 priorityBug.setBugLineAndImage(bugLineAndImages);
@@ -134,11 +100,7 @@ public class BaseInformation {
         }
 
         String deleteFileName=categoryName+"\\"+className+"_"+bugTypes+"_"+bugInstance.getPrimarySourceLineAnnotation().getStartLine();
-        File file=new File(deleteFileName+".png");
-        if(file.isFile()){
-            file.delete();
-        }
-        file=new File(deleteFileName+".dot");
+        File file=new File(deleteFileName+".dot");
         if(file.isFile()){
             file.delete();
         }

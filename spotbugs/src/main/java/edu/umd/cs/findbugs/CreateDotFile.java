@@ -10,7 +10,6 @@ public class CreateDotFile {
     HashMap<String,Integer> map=new HashMap<>();
     private String categoryName;
     public CreateDotFile(){
-        //String directoryName=AnalyseCommand.bugreporterLocation;
         File directory = new File("");
         String  directoryName= null;
         try {
@@ -18,8 +17,7 @@ public class CreateDotFile {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       // System.out.print(directoryName);
-        categoryName=directoryName+"\\images";
+        categoryName=directoryName+"\\"+AnalyseCommand.fileName;
         File dirCategory=new File(categoryName);
         if(!dirCategory.exists()){
             dirCategory.mkdir();
@@ -126,8 +124,8 @@ public class CreateDotFile {
             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(categoryName+"\\"+fileName+".dot", true)));
             out.write("graph G {\n");
 
-           // ClassAnnotation classAnnotation=bugInstance.getPrimaryClass();
-          //  String simpleClassName=classAnnotation.getSimpleClassName();
+            // ClassAnnotation classAnnotation=bugInstance.getPrimaryClass();
+            //  String simpleClassName=classAnnotation.getSimpleClassName();
             MethodAnnotation methodAnnotation=bugInstance.getPrimaryMethod();
 
             String methodName=null;
@@ -173,8 +171,8 @@ public class CreateDotFile {
                     stringAnnotation=(StringAnnotation) annotation;
                     String s=stringAnnotation.toString();
                     if(stringAnnotation.getDescription().equals("Sink method")){
-                    out.write("nodes"+j+"[fontsize=\"20\",shape=\"rectangle\",label = \""+s+"\",style = \"filled\", fillcolor = \"brown1\""+"];");
-                    out.write("\n");}
+                        out.write("nodes"+j+"[fontsize=\"20\",shape=\"rectangle\",label = \""+s+"\",style = \"filled\", fillcolor = \"brown1\""+"];");
+                        out.write("\n");}
                     else{
                         out.write("nodes"+j+"[fontsize=\"20\",shape=\"Mrecord\",label = \""+s+"\"];");
                         out.write("\n");
@@ -189,7 +187,7 @@ public class CreateDotFile {
                     j++;
                 }
             }
-                out.write("}\n");
+            out.write("}\n");
         } catch (Exception e) {
             e.printStackTrace();
         }finally {

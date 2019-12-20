@@ -18,6 +18,7 @@
 package com.h3xstream.findsecbugs.taintanalysis;
 
 import com.h3xstream.findsecbugs.FindSecBugsGlobalConfig;
+import com.h3xstream.findsecbugs.MapHelper;
 import com.h3xstream.findsecbugs.TransferParamFieldReturn.PropritiesHelper;
 import com.h3xstream.findsecbugs.TransferParamFieldReturn.ScanInfo;
 import com.h3xstream.findsecbugs.common.ByteCode;
@@ -210,6 +211,10 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
             Taint.State state = taintConfig.getClassTaintState(fieldSig, Taint.State.UNKNOWN);
             Taint taint = new Taint(state);
 
+            String key =obj.getClassName(cpg)+'.'+obj.getFieldName(cpg);
+            Taint.State ts = MapHelper.getState(key);
+            taint.setState(ts);
+
             if (!state.equals(Taint.State.SAFE)){
                 taint.addLocation(getTaintLocation(), false);
             }
@@ -271,7 +276,21 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
 
     @Override
     public void visitPUTSTATIC(PUTSTATIC obj) {
+        saveStaticField(obj);
         visitPutFieldOp(obj);
+
+    }
+
+    public void saveStaticField(FieldInstruction obj){
+        try{
+            Taint t= getFrame().getTopValue();
+            Taint.State ts = t.getState();
+            String key =obj.getClassName(cpg)+'.'+obj.getFieldName(cpg);
+            MapHelper.putState(key,ts);
+        }catch (DataflowAnalysisException e){
+
+        }
+
     }
 
     public void visitPutFieldOp(FieldInstruction obj) {
@@ -510,6 +529,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
         try {
             Taint valueTaint = getFrame().popValue();
             Taint.State valueState = valueTaint.getState();
+            if(valueTaint.hasTags()) valueState = Taint.State.SAFE;
             Taint idxTaint = getFrame().popValue();
             String idxStr = idxTaint.getConstantValue();
             Taint arrayTaint = getFrame().popValue();
@@ -688,7 +708,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
 //            }
 
 //            transferTaintfield(obj,taintCopy);
-         //   processCollection(obj,taintCopy);
+            processCollection(obj,taintCopy);
             generateConstantValue(obj,taintCopy);
 //            generateRealType(obj,taintCopy);
             modelInstruction(obj,numConsume , numProduce, taintCopy);
@@ -768,6 +788,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
                 e.printStackTrace();
             }
         }else if(className.equals("java.util.Properties") && mName.equals("getProperty")){
+
             if(tf.getStackDepth()<2) return;
             String realClass = "";
             try {
@@ -778,6 +799,7 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
             } catch (Exception e){
                 e.printStackTrace();
             }
+
         }else if(className.equals("java.lang.Class")&&mName.equals("forName")){
             try{
                 String rcName = tf.getStackValue(0).getConstantValue();
@@ -840,31 +862,40 @@ public class TaintFrameModelingVisitor extends AbstractFrameModelingVisitor<Tain
                     } else if ("set".equals(mn)) {
                         if (obj.getArgumentTypes(cpg).length == 2 && stackDep > 2) {
                             String idxStr = tt.getStackValue(1).getConstantValue();
-                            if (idxStr != null) {
+                            if (idxStr != null && idxStr!= " " && idxStr!= "") {
+                                int idxInt = Integer.parseInt(idxStr);
                                 taint.setCollection(tt.getStackValue(stackDep-1));
-                                taint.innerList.set(Integer.parseInt(idxStr), tt.getTopValue().getState());
-                                tt.getValue(varIdx).innerList.set(Integer.parseInt(idxStr), tt.getTopValue().getState());
+                                if(idxInt < taint.innerList.size()){
+                                    taint.innerList.set(idxInt, tt.getTopValue().getState());
+                                    tt.getValue(varIdx).innerList.set(idxInt, tt.getTopValue().getState());
+                                }
                             }
                         }
                     } else if ("get".equals(mn)) {
                         if (taint.collectionIsVaild == true && stackDep > 1) {
                             String idx = tt.getTopValue().getConstantValue();
-                            int iidx = Integer.parseInt(idx);
-                            if (idx != null && iidx < tt.getValue(varIdx).innerList.size()) {
+                            int iidx = -1;
+                            if(idx != null&& idx!= " " && idx!= "")
+                                iidx = Integer.parseInt(idx);
+                            if (iidx != -1 && iidx < tt.getValue(varIdx).innerList.size()) {
                                 taint.setState(tt.getValue(varIdx).innerList.get(iidx));
                             }
                         }
                     }else if("remove".equals(mn)){
-                        ArrayList a = new ArrayList();
                         if(taint.collectionIsVaild == true && stackDep > 1){
                             String idxInner = tt.getStackValue(0).getConstantValue();
-                            if(idxInner != null){
+                            if(idxInner != null && idxInner !="" && idxInner!= " "){
                                 int idxInList = Integer.parseInt(idxInner);
-                                tt.getValue(varIdx).innerList.remove(idxInList);
+                                if(idxInList <  tt.getValue(varIdx).innerList.size())
+                                    tt.getValue(varIdx).innerList.remove(idxInList);
+                                return;
                             }
                         }
-//                        tt.getSlotList().get(varIdx).innerList = null;
-//                        tt.getSlotList().get(varIdx).collectionIsVaild = false;
+                        else {
+                            tt.getSlotList().get(varIdx).innerList = null;
+                            tt.getSlotList().get(varIdx).collectionIsVaild = false;
+                        }
+
                     }
                 } else if (className.contains("Map")) {
                     tt.getValue(varIdx).initMap();

@@ -22,7 +22,7 @@ import java.util.Set;
 public class SaveBugReporter {
     public SaveBugReporter(){
         try {
-            String PdfName=AnalyseCommand.bugreporterLocation+"\\"+"bugReporter.pdf";
+            String PdfName=AnalyseCommand.bugreporterLocation+"\\"+AnalyseCommand.fileName+".pdf";
             File file=new File(PdfName);
             if (file.exists()) {
                 file.delete();
@@ -32,14 +32,14 @@ public class SaveBugReporter {
             document.open();
             BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
             Font FontChinese = new Font(bfChinese,15,Font.BOLD);//加入document：
-           // BaseFont.createFont()
+            // BaseFont.createFont()
             PdfPTable tableTitle=new PdfPTable(1);
             tableTitle.setWidthPercentage(100); // 宽度100%填充
             tableTitle.setSpacingBefore(10f); // 前间距
             tableTitle.setSpacingAfter(10f); // 后间距
             float[] columnWidths1 = {1.8f };
             tableTitle.setWidths(columnWidths1);
-            PdfPCell cellTitle=new PdfPCell(new Paragraph("规则设计平台扫描报告",new
+            PdfPCell cellTitle=new PdfPCell(new Paragraph("规则设计平台扫描文件"+AnalyseCommand.fileName+"报告",new
                     Font(bfChinese,20,Font.BOLD) ));
             cellTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
             cellTitle.disableBorderSide(15);
@@ -52,11 +52,7 @@ public class SaveBugReporter {
 
             document.add(tableTitle);
 
-           /* document.add(new Chunk("规则设计平台扫描报告",new
-                    Font(bfChinese,20,Font.BOLD) ));//title没有用  不会显示
-            document.add(new Paragraph(LaunchAppropriateUI.startTime+" 至 "+LaunchAppropriateUI.endTime,FontChinese));// Paragraph添加文本*/
             /*检测概要*/
-
             document.add(new Paragraph("1.检测概要",FontChinese));
             document.add(new Paragraph("1.1 源代码信息",FontChinese));
 
@@ -70,16 +66,13 @@ public class SaveBugReporter {
             float[] columnWidths = { 0.9f, 0.9f };
             table1.setWidths(columnWidths);
             PdfPCell cells1= new PdfPCell();
-        //    PdfPRow row1_1 = new PdfPRow(cells1);
             cells1 = new PdfPCell(new Paragraph("源代码基本信息",FontNomal));//单元格内容
-        //    cells1.setBorderColor(new BaseColor(0,255,255));//边框验证
             cells1.setPaddingLeft(20);//左填充20
             cells1.setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
             cells1.setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
             cells1.setBackgroundColor(new BaseColor(0,255,255));
             cells1.setColspan(2);
             table1.addCell(cells1);
-
             PdfPCell[] cells2 = new PdfPCell[2];
             PdfPRow  row1_2 = new PdfPRow(cells2);
             cells2[0] = new PdfPCell(new Paragraph("开发语言",FontNomal));
@@ -113,16 +106,21 @@ public class SaveBugReporter {
             savePriority(document,FontNomal);
             saveBugs(document,FontNomal);
             saveDetailInfo(document,FontNomal);
-          document.close();
+            document.close();
 
             File directory = new File("");
             String  categoryName= null;
             try {
-                categoryName = directory.getCanonicalPath()+"\\images";
+                categoryName = directory.getCanonicalPath()+"\\"+AnalyseCommand.fileName;
             } catch (IOException e) {
                 e.printStackTrace();
             }
             File fileDir=new File(categoryName);
+            String name=directory.getCanonicalPath();
+         /*   File xmlr=new File(name+"\\"+"result.xml");
+            if(xmlr.exists()) xmlr.delete();*/
+            File xmli=new File(name+"\\"+"include.xml");
+            if(xmli.delete()) xmli.delete();
             deleteDir(fileDir);
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,7 +188,7 @@ public class SaveBugReporter {
                 double f=(BaseInformation.priorityHigh*1.0/total)*100;
                 DecimalFormat df=new DecimalFormat("#0.00");
                 String r=df.format(f);
-            cell23[2]=new PdfPCell(new Paragraph(r+"%"));}
+                cell23[2]=new PdfPCell(new Paragraph(r+"%"));}
             else {
                 cell23[2]=new PdfPCell(new Paragraph("None"));
             }
@@ -208,7 +206,7 @@ public class SaveBugReporter {
                 double f=(BaseInformation.priorityNormal*1.0/total)*100;
                 DecimalFormat df=new DecimalFormat("#0.00");
                 String r=df.format(f);
-            cell24[2]=new PdfPCell(new Paragraph(r+"%"));}
+                cell24[2]=new PdfPCell(new Paragraph(r+"%"));}
             else {
                 cell24[2]=new PdfPCell(new Paragraph("None"));
             }
@@ -225,7 +223,7 @@ public class SaveBugReporter {
                 double f=(BaseInformation.priorityLow*1.0/total)*100;
                 DecimalFormat df=new DecimalFormat("#0.00");
                 String r=df.format(f);
-            cell25[2]=new PdfPCell(new Paragraph(r+"%"));}
+                cell25[2]=new PdfPCell(new Paragraph(r+"%"));}
             else {
                 cell25[2]=new PdfPCell(new Paragraph("None"));
             }
@@ -281,20 +279,20 @@ public class SaveBugReporter {
 
             for(PriorityBug priorityBug:BaseInformation.priorityBugs){
                 if(!priorityBug.getBugName().equals("nothing")){
-                PdfPCell[] cell=new PdfPCell[5];
-                PdfPRow  row = new PdfPRow(cell);
-                cell[0]=new PdfPCell(new Paragraph(priorityBug.getBugName(),font));
-                cell[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
-                cell[1]=new PdfPCell(new Paragraph(priorityBug.getPrioritys().get(1)+"",font));
-                cell[1].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
-                cell[2]=new PdfPCell(new Paragraph(priorityBug.getPrioritys().get(2)+"",font));
-                cell[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
-                cell[3]=new PdfPCell(new Paragraph(priorityBug.getPrioritys().get(3)+"",font));
-                cell[3].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
-                int total=priorityBug.getPrioritys().get(1)+priorityBug.getPrioritys().get(2)+priorityBug.getPrioritys().get(3);
-                cell[4]=new PdfPCell(new Paragraph(total+"",font));
-                cell[4].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
-                listRow.add(row);}
+                    PdfPCell[] cell=new PdfPCell[5];
+                    PdfPRow  row = new PdfPRow(cell);
+                    cell[0]=new PdfPCell(new Paragraph(priorityBug.getBugName(),font));
+                    cell[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+                    cell[1]=new PdfPCell(new Paragraph(priorityBug.getPrioritys().get(1)+"",font));
+                    cell[1].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+                    cell[2]=new PdfPCell(new Paragraph(priorityBug.getPrioritys().get(2)+"",font));
+                    cell[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+                    cell[3]=new PdfPCell(new Paragraph(priorityBug.getPrioritys().get(3)+"",font));
+                    cell[3].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+                    int total=priorityBug.getPrioritys().get(1)+priorityBug.getPrioritys().get(2)+priorityBug.getPrioritys().get(3);
+                    cell[4]=new PdfPCell(new Paragraph(total+"",font));
+                    cell[4].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+                    listRow.add(row);}
             }
             document.add(table);
         }catch (Exception e){
@@ -315,7 +313,6 @@ public class SaveBugReporter {
                 table.setWidthPercentage(100); // 宽度100%填充
                 table.setSpacingBefore(10f); // 前间距
                 table.setSpacingAfter(10f); // 后间距
-              //  List<PdfPRow> listRow = table.getRows();
                 table.setSplitLate(true);
                 table.setSplitRows(true);
                 float[] columnWidths = {1.8f};
@@ -330,8 +327,6 @@ public class SaveBugReporter {
                 paragraph.setLeading(30f);
                 PdfPCell cellInfos=new PdfPCell(paragraph);
                 table.addCell(cellInfos);
-
-
                 int j=1;
                 Set<BugLineAndImage> bugLineAndImages=priorityBug.getBugLineAndImage();
                 for(BugLineAndImage bugLineAndImage:bugLineAndImages){
@@ -340,18 +335,19 @@ public class SaveBugReporter {
                     table.addCell(cell);
                     PdfPCell cellLine=new PdfPCell(new Paragraph("漏洞行数："+bugLineAndImage.getBugLine(),font));
                     table.addCell(cellLine);
-                    Image png=bugLineAndImage.getImages();
-//                   if(png==null) {
-//                        PdfPCell cellSimpleInfo=new PdfPCell(new Paragraph(bugLineAndImage.getSimpleInfo(),font));
-//                        table.addCell(cellSimpleInfo);
-//                    }
-          //          else {
-                        PdfPCell cellImage = new PdfPCell(new Paragraph("漏洞关系图：", font));
-
-                        table.addCell(cellImage);
-                        //       document.add(table1);
-                        table.addCell(png);
-                //    }
+                    PdfPCell cellImage = new PdfPCell(new Paragraph("漏洞关系图：", font));
+                    /*插入图片*/
+                    File directory = new File("");
+                    String  categoryName= null;
+                    try {
+                        categoryName = directory.getCanonicalPath()+"\\"+AnalyseCommand.fileName;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    String picturePath=categoryName+"\\"+bugLineAndImage.getClassName();
+                    Image image = Image.getInstance(picturePath);
+                    table.addCell(cellImage);
+                    table.addCell(image);
                 }
                 document.add(table);
             }

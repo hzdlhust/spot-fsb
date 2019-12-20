@@ -1167,14 +1167,14 @@ public class PluginLoader {
     private  static  List<String> getPotentialMessageFiles() {
         // Load the message collections
         Locale locale = Locale.getDefault();
-        String language = locale.getLanguage();
-        String country = locale.getCountry();
+//        String language = locale.getLanguage();
+//        String country = locale.getCountry();
 
         List<String> potential = new ArrayList<>(3);
-        if (country != null) {
-            potential.add("messages_" + language + "_" + country + ".xml");
-        }
-        potential.add("messages_" + language + ".xml");
+//        if (country != null) {
+//            potential.add("messages_" + language + "_" + country + ".xml");
+//        }
+//        potential.add("messages_" + language + ".xml");
         potential.add("messages.xml");
         return potential;
     }
